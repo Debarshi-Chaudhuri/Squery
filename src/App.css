@@ -1,33 +1,93 @@
-.App {
-  text-align: center;
+.Searchbar-header{
+  display: inline-flex;
+  background-color:rgba(0, 134, 196, 0.966);
+  width: 96%;
+  align-items: center;
+  padding: 2%;
 }
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+.Searchbar-search{
+  margin-left:5%;
+  height:30px;
+  width:500px;
+  border-radius: 5px;
+  border-width: 1px;
+  margin-right: 4px;
+  text-indent: 6px;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.Searchbar-login{
+  color: white;
+  margin-left: 24%;
+  font-size: 90%;
+}
+.Volunteer-div{
+  z-index: 1;
+  align-items: center;
+  display: inline-flex;
+  justify-content: space-around;
+  width:100%;
+  height: 600px;
+  position: absolute;
+}
+.SignIn{
+  background-color: aqua;
   display: flex;
-  flex-direction: column;
+  width: 40%;
+  height: 100%;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
-
-.App-link {
-  color: #61dafb;
+.CreateAnAccount{
+  display: flex;
+  width: 40%;
+  height: 100%;
+  background-color: aqua;
+  align-items: center;
+  justify-content: center;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.container{
+  z-index: 0;
+  height:600px;
+  width:100%;
+  position: relative;
+}
+.blanket1{
+  z-index: 2;
+  height:600px;
+  width:50%;
+  background-color: blue;
+  position: absolute;
+  animation-name:move2;
+  animation-duration: 2s;
+}
+@keyframes move2{
+  0%{right:0px;top:0px}
+  100%{right:50%;top:0px}
+}
+.blanket3{
+  z-index: 2;
+  height:600px;
+  width:50%;
+  background-color: blue;
+  position: absolute;
+}
+.blanket4{
+  margin:auto 50%;
+  z-index: 2;
+  height:600px;
+  width:50%;
+  background-color: blue;
+  position: absolute;
+}
+.blanket2{
+  z-index: 2;
+  height:600px;
+  width:50%;
+  background-color: blue;
+  position: absolute;
+  animation-name:move1;
+  animation-duration: 2s;
+}
+@keyframes move1{
+  0%{left:0px;top:0px}
+  100%{left:50%;top:0px}
 }
