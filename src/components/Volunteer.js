@@ -4,17 +4,19 @@ import { Button } from "@material-ui/core";
 class Volunteer extends Component{
     constructor(props){
         super(props)
-        this.state={a:'blanket3',info:true,b:'Volunteer3'}
+        this.state={a:'blanket3',info:true,b:'Volunteer3',opacity:'1'}
     }
     click=()=>{
         if(this.state.a==='blanket1'|| this.state.a==='blanket3')
-        this.setState({a:'blanket2',b:'Volunteer2'},()=>{
-            setTimeout(()=>{this.setState({info:false})},500);
+        this.setState({a:'blanket2',b:'Volunteer2',opacity:'0.1'},()=>{
+
+            setTimeout(()=>{this.setState({info:false,opacity:'1'})},500);
             setTimeout(()=>{this.setState({a:'blanket4',b:'Volunteer4'})},1950)
         })
         else if(this.state.a==='blanket2'|| this.state.a==='blanket4')
-        this.setState({a:'blanket1',b:'Volunteer1'},()=>{
-            setTimeout(()=>{this.setState({info:true})},500);
+        this.setState({a:'blanket1',b:'Volunteer1',opacity:'0.1'},()=>{
+
+            setTimeout(()=>{this.setState({info:true,opacity:'1'})},500);
             setTimeout(()=>{this.setState({a:'blanket3',b:'Volunteer3'})},1950)
         })
     }
@@ -29,6 +31,7 @@ class Volunteer extends Component{
                 fontFamily:'Ubuntu',
                 animationDuration:'1.3s',
                 animationTimingFunction:'ease-in-out',
+                opacity:this.state.opacity
             }
         }
         if(this.state.info){
