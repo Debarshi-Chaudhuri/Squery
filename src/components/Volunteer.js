@@ -1,7 +1,6 @@
 import React,{Component} from 'react';
 import {Account} from '../containers/Account';
 import { Button } from "@material-ui/core";
-import { StylesContext } from '@material-ui/styles/StylesProvider';
 class Volunteer extends Component{
     constructor(props){
         super(props)
