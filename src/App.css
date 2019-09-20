@@ -19,6 +19,13 @@
   margin-left: 24%;
   font-size: 90%;
 }
+.Qna-div{
+  display: block;
+  text-align: left;
+  justify-content: left;
+  font-size:large;
+  border: 10px rgba(0, 134, 196, 0.966);
+}
 .Volunteer1{
   z-index: 1;
   height:100%;
@@ -31,14 +38,14 @@
   animation-duration: 2s;
 }
 @keyframes move4{
-  0%{left:10%;top:0px}
-  100%{left:40%;top:0px}
+  0%{left:5%;top:0px}
+  100%{left:45%;top:0px}
 }
 .Volunteer2{
   z-index: 1;
   height:100%;
   width:50%;
-  margin-left: 10%;
+  margin-left: 5%;
   display: flex;
   justify-content: center;
   align-content: center;
@@ -47,12 +54,12 @@
   animation-duration: 2s;
 }
 @keyframes move3{
-  0%{right:10%;top:0px}
-  100%{right:40%;top:0px}
+  0%{right:5%;top:0px}
+  100%{right:45%;top:0px}
 }
 .Volunteer3{
   z-index: 1;
-  margin:auto 40%;
+  margin:auto 45%;
   height:100%;
   width:50%;
   display: flex;
@@ -63,7 +70,7 @@
 }
 .Volunteer4{
   z-index: 1;
-  margin-left: 10%;
+  margin-left: 5%;
   height:100%;
   width:50%;
   display: flex;
@@ -72,23 +79,15 @@
   position: absolute;
 
 }
-
-.SignIn{
-  background-color: aqua;
-  display: flex;
-  width: 30%;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-}
-.CreateAnAccount-div{
+.Account-div{
   height: 100%;
   width: 100%;
+  margin:15%;
   text-align: center;
   justify-items: center;
   line-height: 3;
 }
-.CreateAnAccount-input{
+.Account-input{
   height:30px;
   width:50%;
   border-radius: 5px;
@@ -98,7 +97,7 @@
 .container{
   z-index: 0;
   display: inline-flex;
-  height:700px;
+  height:637px;
   width:100%;
   position: fixed;
   flex: 100%;
