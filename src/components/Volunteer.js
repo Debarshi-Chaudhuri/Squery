@@ -26,6 +26,7 @@ class Volunteer extends Component{
                 margin:'25% auto auto 25%',
                 height:'80%',
                 wordWrap:'break-word',
+                fontFamily:'Ubuntu',
                 animationDuration:'1.3s',
                 animationTimingFunction:'ease-in-out',
             }
@@ -49,7 +50,7 @@ class Volunteer extends Component{
                 </div>
                 <div className={`${this.state.a}`} style={{textAlign:'center',borderRadius:'10px',justifyItems:'center',display:'flex'}}>
                     <div style={styles.container} class={`${style}`}>
-                        <h1 style={{color:'white'}}>{note}</h1>
+                        <h1 style={{color:'white',fontFamily:'Ubuntu'}}>{note}</h1>
                         <p style={{color:'rgba(219, 230, 235, 0.966)'}}>{statement}</p>
                         <Button variant='contained' style={{backgroundColor:'rgba(219, 230, 235, 0.966)',height:'33px'}} onClick={this.click}>{button} </Button>
                     </div>
