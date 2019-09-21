@@ -1,10 +1,19 @@
 import React,{Component} from 'react';
 import {Account} from '../containers/Account';
 import { Button } from "@material-ui/core";
+<<<<<<< HEAD
 class Volunteer extends Component{
     constructor(props){
         super(props)
         this.state={a:'blanket3',info:true,b:'Volunteer3',opacity:'1'}
+=======
+import firebase from "../firebase";
+import {Route,Switch,withRouter} from "react-router-dom";
+class Volunteer extends Component{
+    constructor(props){
+        super(props)
+        this.state={a:'blanket3',info:true,b:'Volunteer3',opacity:'1',uname:"",pass:""}
+>>>>>>> 18608c3f888b2463b4520944323fa0455f0ed005
     }
     click=()=>{
         if(this.state.a==='blanket1'|| this.state.a==='blanket3')
@@ -20,6 +29,23 @@ class Volunteer extends Component{
             setTimeout(()=>{this.setState({a:'blanket3',b:'Volunteer3'})},1950)
         })
     }
+<<<<<<< HEAD
+=======
+    handlechange=(event)=>
+    {
+        this.setState({[event.target.name]:event.target.value});
+    }
+    adduser=()=>
+    {
+        const db=firebase.firestore();
+        db.collection("answeredques").doc(`${this.state.uname}`).set({
+            pass:this.state.pass,
+            ans:""
+        })
+        this.props.history.push(`/Volunteer/${this.state.uname}`)
+        this.setState({uname:"",pass:""})
+    }
+>>>>>>> 18608c3f888b2463b4520944323fa0455f0ed005
     render(){
         let style,note,button,statement;
         const styles={
@@ -49,7 +75,11 @@ class Volunteer extends Component{
         return(<div className='container'>
                 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"></link>
                 <div className={`${this.state.b}`}>
+<<<<<<< HEAD
                     <Account {...this.state}/>
+=======
+                    <Account submit={this.adduser} {...this.state} uname={this.state.uname} pass={this.state.pass} change={this.handlechange}/>
+>>>>>>> 18608c3f888b2463b4520944323fa0455f0ed005
                 </div>
                 <div className={`${this.state.a}`} style={{textAlign:'center',borderRadius:'10px',justifyItems:'center',display:'flex'}}>
                     <div style={styles.container} class={`${style}`}>
@@ -62,4 +92,8 @@ class Volunteer extends Component{
         )
     }
 }
+<<<<<<< HEAD
 export default Volunteer;
+=======
+export default withRouter(Volunteer);
+>>>>>>> 18608c3f888b2463b4520944323fa0455f0ed005
