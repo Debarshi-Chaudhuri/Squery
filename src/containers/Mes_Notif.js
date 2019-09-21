@@ -15,13 +15,13 @@ const useStyles = makeStyles({
 export const Mes_Notif=()=>{
     const classes = useStyles();
     return(
-        <div style={{backgroundColor: 'rgba(0, 134, 196, 0.966)',position:"fixed",height:"100vh",left:"94%"}}>
-        <Grid container direction="column" justify="flex-start" alignItems="flex-end">
-        
-            <Button><Avatar alt="msg" src={require("../Images/msg1.png")} className={classes.bigAvatar}/></Button>
-            <Button><Avatar alt="msg" src={require("../Images/notif3.png")} className={classes.bigAvatar}/></Button>
-        
-        </Grid>
+        <div style={{backgroundColor: 'rgba(0, 134, 196, 0.966)',position:"fixed",height:"100%"}}>
+          <Grid container direction="column" justify="flex-start" alignItems="flex-end">
+          
+              <Avatar alt="msg" style={{cursor:'pointer'}} src={require("../Images/msg1.png")} className={classes.bigAvatar}/>
+              <Avatar alt="msg" style={{cursor:'pointer'}} src={require("../Images/notif3.png")} className={classes.bigAvatar}/>
+          
+          </Grid>
         </div>
     )
 }

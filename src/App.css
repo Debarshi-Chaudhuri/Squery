@@ -120,7 +120,7 @@
 .container{
   z-index: 0;
   display: inline-flex;
-  height:637px;
+  height:1000px;
   width:100%;
   position: fixed;
   flex: 100%;
