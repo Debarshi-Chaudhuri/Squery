@@ -1,0 +1,170 @@
+.Searchbar-header{
+  display: inline-flex;
+  background-color:rgba(0, 134, 196, 0.966);
+  width: 96%;
+  align-items: center;
+  padding: 2%;
+}
+.Profile-header{
+  direction: row;
+  justify-items: center;
+  align-items: center;
+  height: 100vh;
+  width: 300px;
+  background-color: rgba(0, 134, 196, 0.966);
+}
+.close{
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  padding: 2px 5px;
+  line-height: 20px;
+  right: -10px;
+  top: -10px;
+  font-size: 24px;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #cfcece;
+}
+.Searchbar-search{
+  margin-left:5%;
+  height:30px;
+  width:500px;
+  border-radius: 5px;
+  border-width: 1px;
+  margin-right: 4px;
+  text-indent: 6px;
+}
+.Searchbar-login{
+  color: white;
+  margin-left: 24%;
+  font-size: 90%;
+}
+.Qna-div{
+  display: block;
+  text-align: left;
+  justify-content: left;
+  font-size:large;
+  border: 10px rgba(0, 134, 196, 0.966);
+}
+.Volunteer1{
+  z-index: 1;
+  height:100%;
+  width:50%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  position: absolute;
+  animation-name:move4;
+  animation-duration: 2s;
+}
+@keyframes move4{
+  0%{left:5%;top:0px}
+  100%{left:45%;top:0px}
+}
+.Volunteer2{
+  z-index: 1;
+  height:100%;
+  width:50%;
+  margin-left: 5%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  position: absolute;
+  animation-name:move3;
+  animation-duration: 2s;
+}
+@keyframes move3{
+  0%{right:5%;top:0px}
+  100%{right:45%;top:0px}
+}
+.Volunteer3{
+  z-index: 1;
+  margin:auto 45%;
+  height:100%;
+  width:50%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  position: absolute;
+
+}
+.Volunteer4{
+  z-index: 1;
+  margin-left: 5%;
+  height:100%;
+  width:50%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  position: absolute;
+
+}
+.Account-div{
+  height: 100%;
+  width: 100%;
+  margin:15%;
+  text-align: center;
+  justify-items: center;
+  line-height: 3;
+}
+.Account-input{
+  height:30px;
+  width:50%;
+  border-radius: 5px;
+  border-width: 1px;
+  text-indent: 6px;
+}
+.container{
+  z-index: 0;
+  display: inline-flex;
+  height:637px;
+  width:100%;
+  position: fixed;
+  flex: 100%;
+  
+}
+.blanket1{
+  z-index: 2;
+  margin-right: -10%;
+  height:100%;
+  width:50%;
+  background-color: rgba(0, 134, 196, 0.966);
+  position: absolute;
+  animation-name:move2;
+  animation-duration: 2s;
+}
+@keyframes move2{
+  0%{right:0px;top:0px}
+  100%{right:70%;top:0px}
+}
+.blanket2{
+  z-index: 2;
+  height:100%;
+  width:50%;
+  margin-left: -10%;
+  background-color: rgba(0, 134, 196, 0.966);
+  position: absolute;
+  animation-name:move1;
+  animation-duration: 2s;
+}
+@keyframes move1{
+  0%{left:0px;top:0px}
+  100%{left:70%;top:0px}
+}
+.blanket3{
+  z-index: 2;
+  height:100%;
+  width:50%;
+  margin-left: -10%;
+  background-color: rgba(0, 134, 196, 0.966);
+  position: absolute;
+}
+.blanket4{
+  margin:auto 60%;
+  z-index: 2;
+  height:100%;
+  width:50%;
+  background-color: rgba(0, 134, 196, 0.966);
+  position: absolute;
+}
