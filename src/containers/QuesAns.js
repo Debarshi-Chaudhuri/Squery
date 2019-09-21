@@ -5,7 +5,7 @@ import React from 'react';
 export const QuesAns=()=>{
     
     return(
-        <div className=''>
+        <div style={{backgroundColor:'blue' }}>
             Questions you have answered...
             
         </div>

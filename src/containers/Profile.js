@@ -15,29 +15,32 @@ const useStyles = makeStyles({
 export const Profile=()=>{
     const classes = useStyles();
     return(
-        <div className='Profile-header'>
-            <Button><Avatar alt="Profile-pic" className={classes.bigAvatar}/></Button>
-            <p style={{color:'white',fontSize:'120%',marginLeft:"95px"}}>Rating</p> 
-            <div>
-        <Popup contentStyle={{width:"600px",border:"none",backgroundColor:'rgba(219, 230, 235, 0.966)'}} trigger={<Button variant='contained' style={{backgroundColor:'rgba(219, 230, 235, 0.966)',height:'33px',marginLeft:"75px"}} >Add Tags</Button>} closeOnDocumentClick position="right center">
-        
-            <div>
-        <div>
-            Tags:You will get notfied if someone ask questions related to these topics. 
-        </div>
-        <br/><br/>
-      <form>
-        <div className="radio">
-          Top tags:
+          <div className='Profile-header'>
+            <Avatar alt="Profile-pic" style={{cursor:'pointer'}} className={classes.bigAvatar} onClick={()=>console.log('a')} />
 
-        </div><br/><br/>
-      </form>
-      <input type="text" placeholder="Enter your tags" className="Searchbar-search"/>
-            </div>
-        
-        
+            <p style={{color:'white',fontSize:'120%'}}>Rating</p> 
+            <div>
+              <Popup 
+              contentStyle={{width:"600px",border:"none",backgroundColor:'rgba(219, 230, 235, 0.966)'}} 
+              
+              trigger={<Button variant='contained' style={{backgroundColor:'rgba(219, 230, 235, 0.966)',height:'100%'}} >Add Tags</Button>} 
+              
+              closeOnDocumentClick position="right center">
+                
+                <div>
+                  <div>
+                      Tags:You will get notfied if someone ask questions related to these topics. 
+                  </div>
+                  <br/><br/>
+                  <form>
+                    <div className="radio">
+                      Top tags:
 
-        </Popup>    
+                    </div><br/><br/>
+                  </form>
+                  <input type="text" placeholder="Enter your tags" className="Searchbar-search"/>
+                </div>
+              </Popup>    
         </div>
         </div>
     )

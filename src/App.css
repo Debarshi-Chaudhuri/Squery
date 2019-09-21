@@ -5,14 +5,14 @@
   align-items: center;
   padding: 2%;
 }
-<<<<<<< HEAD
-=======
 .Profile-header{
-  direction: row;
+  flex-direction: column;
   justify-items: center;
   align-items: center;
+  display: flex;
+  min-width:170px ;
   height: 100vh;
-  width: 300px;
+  width: 20%;
   background-color: rgba(0, 134, 196, 0.966);
 }
 .close{
@@ -28,7 +28,6 @@
   border-radius: 18px;
   border: 1px solid #cfcece;
 }
->>>>>>> 18608c3f888b2463b4520944323fa0455f0ed005
 .Searchbar-search{
   margin-left:5%;
   height:30px;

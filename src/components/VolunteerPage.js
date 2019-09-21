@@ -5,21 +5,17 @@ import {QuesAns} from "../containers/QuesAns";
 import {withRouter} from "react-router-dom";
 import { Button,Avatar ,makeStyles,Grid} from "@material-ui/core";
 class VolunteerPage extends React.Component{
-componentDidMount()
-{
-    console.log(this.props.match.params.id)
-}
-    render()
-{
+    componentDidMount(){
+        console.log(this.props.match.params.id)
+    }
+    render(){
     return(
         <div>
-        <Grid container
-  direction="row"
-  justify="flex-start"
-  alignItems="center">
-            <Profile/>
-            <QuesAns/>
-            <Mes_Notif/>
+            <Grid container
+                style={{display:'inline-flex'}}>
+                <Profile/>
+                <QuesAns />
+                <Mes_Notif/>
             </Grid>
         </div>
     );

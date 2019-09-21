@@ -11,10 +11,7 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.1.1",
     "react-simple-chatbot": "^0.6.1",
-<<<<<<< HEAD
-=======
     "reactjs-popup": "^1.5.0",
->>>>>>> 18608c3f888b2463b4520944323fa0455f0ed005
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",

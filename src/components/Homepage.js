@@ -21,39 +21,24 @@ class Homepage extends Component{
     componentDidMount(){
         let a=[];
         const db = firebase.firestore();
-<<<<<<< HEAD
-        db.collection("qna").get().then((querySnapshot) => {
-=======
         db.collection("anonymous").get().then((querySnapshot) => {
->>>>>>> 18608c3f888b2463b4520944323fa0455f0ed005
             querySnapshot.forEach((doc) => {
                 console.log(doc.data())
                 a.push(doc.data());
             })
             this.props.homepageOnLoad(a);
         }); 
-<<<<<<< HEAD
-=======
         
->>>>>>> 18608c3f888b2463b4520944323fa0455f0ed005
     }
     render(){
         const steps=[
             {
                 id: '0',
-<<<<<<< HEAD
-                message: "Do you have any questions?",
-=======
                 message: "Choose an option",
->>>>>>> 18608c3f888b2463b4520944323fa0455f0ed005
                 trigger: '1'
             },
             {
                 id: '1',
-<<<<<<< HEAD
-                user:true,
-                trigger:"3"
-=======
                 options: [
                     { value: 1, label: 'Ask question in private', trigger: '2' },
                     { value: 2, label: 'Ask question publicly', trigger: '3' },
@@ -63,16 +48,11 @@ class Homepage extends Component{
                 id:'2',
                 message:'someone will contact you soon',
                 end:true
->>>>>>> 18608c3f888b2463b4520944323fa0455f0ed005
             },
             {
-            id:"3",
-            message: 'Hi {previousValue}',
-<<<<<<< HEAD
-            trigger:"1"
-=======
-            end:true
->>>>>>> 18608c3f888b2463b4520944323fa0455f0ed005
+                id:"3",
+                message: 'Hi {previousValue}',
+                end:true
             }
         ];
         return(
