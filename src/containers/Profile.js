@@ -32,7 +32,7 @@ export const Profile=()=>{
 
         </div><br/><br/>
       </form>
-      <input type="text" placeholder="Enter your tags" className="Searchbar-search"/>
+      <input type="text" placeholder="Enter your tags" className="Searchbar-searchs"/>
             </div>
         
         

@@ -6,7 +6,7 @@ import {Route,Switch,withRouter} from "react-router-dom";
 class Volunteer extends Component{
     constructor(props){
         super(props)
-        this.state={a:'blanket3',info:true,b:'Volunteer3',opacity:'1',uname:"",pass:""}
+        this.state={a:'blanket3',info:true,b:'Volunteer3',opacity:'1',uname:"",pass:"",email:""}
     }
     click=()=>{
         if(this.state.a==='blanket1'|| this.state.a==='blanket3')
@@ -26,15 +26,52 @@ class Volunteer extends Component{
     {
         this.setState({[event.target.name]:event.target.value});
     }
-    adduser=()=>
+    adduserSignUp=()=>
     {
+        var exist=false;
         const db=firebase.firestore();
+        db.collection("answeredques").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                if(this.state.uname==doc.id && this.state.email==doc.data().email)
+                {
+                    exist=true;
+                }
+            })
+        });
+        if(!exist)
+        {
         db.collection("answeredques").doc(`${this.state.uname}`).set({
             pass:this.state.pass,
-            ans:""
+            ans:"",
+            email:this.state.email
         })
         this.props.history.push(`/Volunteer/${this.state.uname}`)
+        this.setState({uname:"",pass:"",email:""})
+    }
+    else{
+        alert("username/email already exists");
+    }
+    }
+    adduserSignIn=()=>
+    {
+        var match=false;
+        const db=firebase.firestore();
+        db.collection("answeredques").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                if(this.state.uname==doc.id && this.state.pass==doc.data().pass)
+                {
+                    match=true;
+                }
+            })
+        });
+        if(!match)
+        {
+        this.props.history.push(`/Volunteer/${this.state.uname}`)
         this.setState({uname:"",pass:""})
+        }   
+    else{
+        alert("username does exist or password doesnot match");
+    }
     }
     render(){
         let style,note,button,statement;
@@ -65,7 +102,7 @@ class Volunteer extends Component{
         return(<div className='container'>
                 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"></link>
                 <div className={`${this.state.b}`}>
-                    <Account submit={this.adduser} {...this.state} uname={this.state.uname} pass={this.state.pass} change={this.handlechange}/>
+                    <Account submitSignIn={this.adduserSignIn} submitSignUp={this.adduserSignUp} {...this.state} uname={this.state.uname} pass={this.state.pass} change={this.handlechange} email={this.state.email}/>
                 </div>
                 <div className={`${this.state.a}`} style={{textAlign:'center',borderRadius:'10px',justifyItems:'center',display:'flex'}}>
                     <div style={styles.container} class={`${style}`}>

@@ -26,6 +26,16 @@
   border-radius: 18px;
   border: 1px solid #cfcece;
 }
+.Searchbar-searchs{
+  margin-left:5%;
+  height:30px;
+  width:500px;
+  border-radius: 5px;
+  border-width: 1px;
+  margin-right: 4px;
+  text-indent: 6px;
+  margin-bottom: 20px;
+}
 .Searchbar-search{
   margin-left:5%;
   height:30px;
