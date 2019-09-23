@@ -10,8 +10,10 @@
   justify-items: center;
   align-items: center;
   display: flex;
+  position: fixed;
   min-width:170px ;
   height: 100vh;
+  z-index: 3;
   width: 20%;
   background-color: rgba(0, 134, 196, 0.966);
 }

@@ -2,6 +2,7 @@ import React from 'react';
 //import { NavLink } from "react-router-dom";
 import { Button,Avatar ,makeStyles} from "@material-ui/core";
 import Popup from "reactjs-popup";
+import { maxWidth } from '@material-ui/system';
 const useStyles = makeStyles({
     avatar: {
       margin: 10,
@@ -21,24 +22,21 @@ export const Profile=()=>{
             <p style={{color:'white',fontSize:'120%'}}>Rating</p> 
             <div>
               <Popup 
-              contentStyle={{width:"600px",border:"none",backgroundColor:'rgba(219, 230, 235, 0.966)'}} 
+              contentStyle={{width:'150%',border:"none",backgroundColor:'rgba(219, 230, 235, 0.966)',zIndex:'4',display:'flex',flexDirection:'column',borderRadius:'10px'}} 
               
               trigger={<Button variant='contained' style={{backgroundColor:'rgba(219, 230, 235, 0.966)',height:'100%'}} >Add Tags</Button>} 
               
               closeOnDocumentClick position="right center">
                 
                 <div>
-                  <div>
-                      Tags:You will get notfied if someone ask questions related to these topics. 
-                  </div>
-                  <br/><br/>
-                  <form>
-                    <div className="radio">
-                      Top tags:
-
-                    </div><br/><br/>
-                  </form>
-                  <input type="text" placeholder="Enter your tags" className="Searchbar-search"/>
+                  <p style={{marginLeft:'2%'}}>
+                      Tags: You will get notfied if someone ask questions related to these topics. 
+                  </p>
+                  <p style={{marginLeft:'2%'}}>
+                      Top tags :
+                  </p>
+                  <br></br>
+                  <p><input type="text" placeholder="Enter your tags" style={{width: '96%',height:'25px',borderRadius:'5px',borderWidth:'1px',marginLeft:'2%'}}/></p>
                 </div>
               </Popup>    
         </div>
