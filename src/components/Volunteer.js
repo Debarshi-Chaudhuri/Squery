@@ -34,7 +34,6 @@ class Volunteer extends Component{
         db.collection("answeredques").doc(`${this.state.uname}`).set({uid:res.user.uid,email:this.state.email,pass:this.state.pass,ans:""})}).then((res2)=>this.setState({email:"",uname:"",pass:""})).catch((error)=> {
             console.log(error.code);
             console.log(error.message);
-            
           });
           
     }
