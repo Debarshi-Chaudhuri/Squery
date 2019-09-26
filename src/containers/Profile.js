@@ -1,8 +1,7 @@
 import React from 'react';
 //import { NavLink } from "react-router-dom";
-import { Button,Avatar ,makeStyles} from "@material-ui/core";
+import { Button,Avatar ,makeStyles,Tooltip} from "@material-ui/core";
 import Popup from "reactjs-popup";
-import { maxWidth } from '@material-ui/system';
 const useStyles = makeStyles({
     avatar: {
       margin: 10,
@@ -13,12 +12,23 @@ const useStyles = makeStyles({
       height: 150,
     },
   });
-export const Profile=()=>{
+  
+export const Profile=(props)=>{
+  const storeImg=(e)=>
+  {
+    const user=props.firebase.auth().currentUser;
+    //console.log(user);
+    const str=props.firebase.storage();
+    const db=props.firebase.firestore();
+    str.ref().child('images').put(e.target.files[0]).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{db.collection("answeredques").doc(user.displayName).set({urlImgProfile:url},{merge:true})}))
+  }
     const classes = useStyles();
+   
     return(
           <div className='Profile-header'>
-            <Avatar alt="Profile-pic" style={{cursor:'pointer'}} className={classes.bigAvatar} onClick={()=>console.log('a')} />
-
+          <Tooltip title="click to change or set profile picture" placement="bottom">
+            <Avatar alt="Profile-pic" style={{cursor:'pointer'}} type="file" className={classes.bigAvatar} onChange={()=>storeImg} />
+            </Tooltip>
             <p style={{color:'white',fontSize:'120%'}}>Rating</p> 
             <div>
               <Popup 
