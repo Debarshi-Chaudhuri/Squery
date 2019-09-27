@@ -86,9 +86,14 @@ class Volunteer extends Component{
             })
             if(match)
             {
-                db.collection("answeredques").doc(`${this.state.uname}`).onSnapshot((doc)=>{ auth.signInWithEmailAndPassword(doc.data().email, this.state.pass).then((res)=>{this.props.history.push(`/Volunteer/${this.state.uname}`)
+                db.collection("answeredques").doc(`${this.state.uname}`).onSnapshot((doc)=>{ auth.signInWithEmailAndPassword(doc.data().email, this.state.pass).then(
+                    (res)=>{
+                        if(auth.currentUser.emailVerified)
+                        {
+                        this.props.history.push(`/Volunteer/${this.state.uname}`)
                 //console.log(res);
-                this.setState({uname:"",pass:""})}).catch((error)=>{
+                this.setState({uname:"",pass:""})}
+            else{alert("Unverified account")}}).catch((error)=>{
                     console.log(error.code);
                     console.log(error.message);
                     this.setState({uname:"",pass:""})
@@ -161,6 +166,7 @@ class Volunteer extends Component{
         ContentProps={{
           'aria-describedby': 'message-id',
         }}
+        style={{backgroundColor:"#1100BB"}}
         variant="information"
         autoHideDuration={5000}
         message={<span id="message-id">Email sent verify email</span>}/>
