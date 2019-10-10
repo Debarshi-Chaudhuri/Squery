@@ -26,14 +26,7 @@ class VolunteerPage extends React.Component{
           });
           //console.log(firebase.auth().currentUser.displayName);
     }
-    signOut=()=>{
-    firebase.auth().signOut().then(function() {
-      console.log("successfully signed out")
-    }).catch(function(error) {
-      console.log("Error occured")
-    });
-    this.props.history.push('/Volunteer')
-  }
+    
     render(){
     return(
         <div style={{zIndex:'1'}} >
@@ -41,7 +34,7 @@ class VolunteerPage extends React.Component{
                 style={{display:'inline-flex',zIndex:'2'}}>
                 <Profile firebase={firebase}/>
                 <QuesAns />
-                <Mes_Notif signOut={this.signOut}/>
+                <Mes_Notif signOut={this.props.signOut}/>
             </Grid>
         </div>
     );

@@ -4,10 +4,11 @@ import { Button,Snackbar } from "@material-ui/core";
 import firebase from "../firebase";
 import background2 from '../Images/background2.jpg';
 import white from '../Images/white.jpg';
+import VolunteerPage from './VolunteerPage';
 class Volunteer extends Component{
     constructor(props){
         super(props)
-        this.state={a:'blanket3',info:true,b:'Volunteer3',opacity:'1',uname:"",pass:"",email:"",popup:false}
+        this.state={a:'blanket3',info:true,b:'Volunteer3',opacity:'1',uname:"",pass:"",email:"",popup:false,loggedIn:false}
     }
     click=()=>{
         if(this.state.a==='blanket1'|| this.state.a==='blanket3')
@@ -27,7 +28,7 @@ class Volunteer extends Component{
     {
         this.setState({[event.target.name]:event.target.value});
     }
-    adduserSignUp=()=>
+    addUserSignUp=()=>
     {
         var exist=false;
         const auth=firebase.auth();
@@ -75,11 +76,10 @@ class Volunteer extends Component{
         
           
     }
-    adduserSignIn=()=>
+    addUserSignIn=()=>
     {
         var match=false;
         const auth=firebase.auth();
-        //console.log(auth);
         const db=firebase.firestore();
       
         db.collection("answeredques").get().then((query)=>{
@@ -87,20 +87,17 @@ class Volunteer extends Component{
                 console.log(doc.data().email)
                 console.log(this.state.uname)
                 console.log(this.state.pass)
-                if(doc.id==this.state.uname)
-                {
+                if(doc.id==this.state.uname){
                     match=true;
                 }
            
             })
-            if(match)
-            {
+            if(match){
                 db.collection("answeredques").doc(`${this.state.uname}`).onSnapshot((doc)=>{ auth.signInWithEmailAndPassword(doc.data().email, this.state.pass).then(
                     (res)=>{
-                        if(auth.currentUser.emailVerified)
-                        {
-                            this.props.history.push(`/Volunteer/${this.state.uname}`)
-                            //console.log(res);
+                        if(auth.currentUser.emailVerified){
+                            //this.props.history.push(`/Volunteer/${this.state.uname}`)
+                            this.setState({loggedIn:true})
                             this.setState({uname:"",pass:""})
                         }
                         else{
@@ -116,8 +113,16 @@ class Volunteer extends Component{
             else{
                 alert("username not found / SignUp")
                 this.setState({uname:"",pass:""})
-               }
+            }
         })
+    }
+    addUserSignOut=()=>{
+        this.setState({loggedIn:false})
+        firebase.auth().signOut().then(function() {
+          console.log("successfully signed out")
+        }).catch(function(error) {
+          console.log("Error occured")
+        });
     }
     render(){
         let style,note,button,statement;
@@ -145,11 +150,12 @@ class Volunteer extends Component{
             statement='Enter your personal details and start your journey with us';
             button='Sign Up';
         }
+        if(!this.state.loggedIn)
         return(<div className='container'>
                 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"></link>
                 <div className={`${this.state.b}`}>
                
-                    <Account submitSignIn={this.adduserSignIn} submitSignUp={this.adduserSignUp} {...this.state} uname={this.state.uname} pass={this.state.pass} change={this.handlechange} email={this.state.email}/>
+                    <Account submitSignIn={this.addUserSignIn} submitSignUp={this.addUserSignUp} {...this.state} uname={this.state.uname} pass={this.state.pass} change={this.handlechange} email={this.state.email}/>
                     
                 </div>
                 <div className={`${this.state.a}`} style={{textAlign:'center',borderRadius:'10px',justifyItems:'center',display:'flex',backgroundImage:`url(${background2})`}}>
@@ -171,6 +177,10 @@ class Volunteer extends Component{
                     message={<span id="message-id">Email sent verify email</span>}
                 />
             </div>
+        )
+        else
+        return(
+            <div><VolunteerPage signOut={this.addUserSignOut} /></div>
         )
     }
 }
