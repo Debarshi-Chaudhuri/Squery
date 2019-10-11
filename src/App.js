@@ -13,8 +13,7 @@ function App() {
         <Route exact path='/' component={Homepage} />
         <Route exact path='/Volunteer' component={Volunteer} /> 
         <Route exact path='/Volunteer/:id' component={VolunteerPage} />
-        <Redirect exact to='/Volunteer'/>
-        <Route exact path='*' component={NotFound}/>
+        <Route component={NotFound}/>
       </Switch>
       
     </div>

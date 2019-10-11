@@ -1,9 +1,8 @@
 .Searchbar-header{
   display: inline-flex;
   background-color:rgba(0, 134, 196, 0.966);
-  width: 96%;
+  width: 100%;
   align-items: center;
-  padding: 2%;
 }
 .Profile-header{
   flex-direction: column;

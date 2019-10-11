@@ -1,14 +1,35 @@
 import React,{Component} from 'react';
+import {bindActionCreators} from 'redux';
+import { connect } from "react-redux";
+import { loggingIn,loggingOut } from "../actions/action";
 import {Account} from '../containers/Account';
 import { Button,Snackbar } from "@material-ui/core";
 import firebase from "../firebase";
 import background2 from '../Images/background2.jpg';
-import white from '../Images/white.jpg';
 import VolunteerPage from './VolunteerPage';
+const mapDispatchToProps=(dispatch)=>{
+    return bindActionCreators({
+        loggingIn,loggingOut
+    },dispatch)
+}
+const mapStateToProps=(store)=>{
+    return({
+        loggedIn:store.loggedIn,
+        user:store.user
+    })
+}
 class Volunteer extends Component{
     constructor(props){
         super(props)
-        this.state={a:'blanket3',info:true,b:'Volunteer3',opacity:'1',uname:"",pass:"",email:"",popup:false,loggedIn:false}
+        this.state={a:'blanket3',info:true,b:'Volunteer3',opacity:'1',uname:"",pass:"",email:"",popup:false}
+    }
+    componentDidMount(){
+        console.log(this.props.user)
+        firebase.auth().signOut().then(function() {
+            console.log("successfully signed out")
+          }).catch(function(error) {
+            console.log("Error occured")
+        });
     }
     click=()=>{
         if(this.state.a==='blanket1'|| this.state.a==='blanket3')
@@ -24,8 +45,7 @@ class Volunteer extends Component{
             setTimeout(()=>{this.setState({a:'blanket3',b:'Volunteer3'})},1950)
         })
     }
-    handlechange=(event)=>
-    {
+    handlechange=(event)=>{
         this.setState({[event.target.name]:event.target.value});
     }
     addUserSignUp=()=>
@@ -47,7 +67,7 @@ class Volunteer extends Component{
                 auth.createUserWithEmailAndPassword(this.state.email,this.state.pass).then(
                     (res)=>{
                         console.log(res)
-                        db.collection("answeredques").doc(`${this.state.uname}`).set({uid:res.user.uid,email:this.state.email,pass:this.state.pass,ans:""})}).then(
+                        db.collection("answeredques").doc(`${this.state.uname}`).set({uid:res.user.uid,email:this.state.email,pass:this.state.pass,ans:"",active:false})}).then(
                             (res2)=>{
                                 console.log(res2)
                                 const user=firebase.auth().currentUser;
@@ -84,9 +104,9 @@ class Volunteer extends Component{
       
         db.collection("answeredques").get().then((query)=>{
             query.forEach((doc)=>{
-                console.log(doc.data().email)
-                console.log(this.state.uname)
-                console.log(this.state.pass)
+                //console.log(doc.data().email)
+                //console.log(this.state.uname)
+                //console.log(this.state.pass)
                 if(doc.id==this.state.uname){
                     match=true;
                 }
@@ -96,7 +116,7 @@ class Volunteer extends Component{
                 db.collection("answeredques").doc(`${this.state.uname}`).onSnapshot((doc)=>{ auth.signInWithEmailAndPassword(doc.data().email, this.state.pass).then(
                     (res)=>{
                         if(auth.currentUser.emailVerified){
-                            //this.props.history.push(`/Volunteer/${this.state.uname}`)
+                            this.props.history.push(`/Volunteer/${this.state.uname}`)
                             this.setState({loggedIn:true})
                             this.setState({uname:"",pass:""})
                         }
@@ -115,14 +135,6 @@ class Volunteer extends Component{
                 this.setState({uname:"",pass:""})
             }
         })
-    }
-    addUserSignOut=()=>{
-        this.setState({loggedIn:false})
-        firebase.auth().signOut().then(function() {
-          console.log("successfully signed out")
-        }).catch(function(error) {
-          console.log("Error occured")
-        });
     }
     render(){
         let style,note,button,statement;
@@ -150,7 +162,6 @@ class Volunteer extends Component{
             statement='Enter your personal details and start your journey with us';
             button='Sign Up';
         }
-        if(!this.state.loggedIn)
         return(<div className='container'>
                 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"></link>
                 <div className={`${this.state.b}`}>
@@ -178,10 +189,6 @@ class Volunteer extends Component{
                 />
             </div>
         )
-        else
-        return(
-            <div><VolunteerPage signOut={this.addUserSignOut} /></div>
-        )
     }
 }
-export default Volunteer;
+export default connect(mapStateToProps,mapDispatchToProps)(Volunteer);
