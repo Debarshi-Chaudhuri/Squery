@@ -63,33 +63,42 @@ class Volunteer extends Component{
             })
             if(!exist)
             {
-                console.log(auth)
-                auth.createUserWithEmailAndPassword(this.state.email,this.state.pass).then(
-                    (res)=>{
-                        console.log(res)
-                        db.collection("answeredques").doc(`${this.state.uname}`).set({uid:res.user.uid,email:this.state.email,pass:this.state.pass,ans:"",active:false})}).then(
-                            (res2)=>{
-                                console.log(res2)
-                                const user=firebase.auth().currentUser;
-                                user.sendEmailVerification().then(
-                                    ()=> {
-                                        console.log("email sent")
-                                        console.log(auth)
-                                        this.setState({popup:true});
-                                        auth.currentUser.updateProfile({displayName:this.state.uname})
-                                        this.setState({email:"",uname:"",pass:""})
-                                    }).catch(function(error) {
-                                    console.log(error)
-                                })
-                            }).catch((error)=> {
-                        console.log(error.code);
-                        alert(error.message);
-                        
-                    });
+                if(this.state.uname!==''){
+                    console.log(auth)
+                    auth.createUserWithEmailAndPassword(this.state.email,this.state.pass).then(
+                        (res)=>{
+                            console.log(res)
+                            db.collection("answeredques").doc(`${this.state.uname}`).set({uid:res.user.uid,email:this.state.email,pass:this.state.pass,ans:"",active:false})}).then(
+                                (res2)=>{
+                                    console.log(res2);
+                                    const user=firebase.auth().currentUser;
+                                    user.sendEmailVerification().then(
+                                        ()=> {
+                                            console.log("email sent");
+                                            console.log(auth);
+                                            this.setState({popup:true});
+                                            auth.currentUser.updateProfile({displayName:this.state.uname});
+                                            this.setState({email:"",uname:"",pass:""});
+                                        }).catch(function(error) {
+                                        this.setState({email:"",uname:"",pass:""});
+                                        console.log(error);
+                                    })
+                                }).catch((error)=> {
+                            this.setState({email:"",uname:"",pass:""});
+                            console.log(error.code);
+                            alert(error.message);
+                            
+                        });
+                    }
+                    else{
+                        this.setState({email:"",uname:"",pass:""});
+                        alert('Invalid Username');
+                    }
                       
             }
             else
             {
+                this.setState({email:"",uname:"",pass:""})
                 alert("USERNAME ALREADY EXISTS");
             }
         })

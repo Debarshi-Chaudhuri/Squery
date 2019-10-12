@@ -34,7 +34,7 @@ class VolunteerPage extends React.Component{
   }
   
   signOut=()=>{
-    this.props.history.goBack();
+    this.props.history.push('/Volunteer');
     firebase.auth().signOut().then(function() {
       console.log("successfully signed out")
     }).catch(function(error) {
@@ -43,9 +43,17 @@ class VolunteerPage extends React.Component{
   }
   render(){
     if(this.state.resubmission)
-    return(<div>
-      <h3>You are logged out go back</h3>
-    </div>)
+    return(
+      <div id="notfound">
+        <div className="notfound">
+            <div className="notfound-404">
+                <h3>You logged out. Confirm resubmission</h3>
+                <h1><span>4</span><span>0</span><span>4</span></h1>
+            </div>
+            <p>Go Back</p>
+        </div>
+	    </div>
+    )
     else
     return(
         <div style={{zIndex:'1'}} >
