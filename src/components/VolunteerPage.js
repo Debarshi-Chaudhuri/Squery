@@ -5,10 +5,11 @@ import {QuesAns} from "../containers/QuesAns";
 import {withRouter} from "react-router-dom";
 import { Button,Avatar ,makeStyles,Grid, Container} from "@material-ui/core";
 import firebase from "../firebase";
+import '../VolunPage.css'
 class VolunteerPage extends React.Component{
   constructor(props){
     super(props)
-    this.state={resubmission:true}
+    this.state={resubmission:false,loading:true,uname:''}
   }
   componentDidMount(){
     console.log(this.props)
@@ -23,10 +24,11 @@ class VolunteerPage extends React.Component{
         console.log(user.isAnonymous);
         console.log(user.uid);
         console.log(user.providerData);
-        this.setState({resubmission:false})
+        this.setState({loading:false,uname:user.displayName})
       }
       else {
         console.log("user signed out");
+        this.setState({loading:false,resubmission:true})
       }
     });
     //console.log(firebase.auth().currentUser.displayName);
@@ -41,7 +43,13 @@ class VolunteerPage extends React.Component{
     });
   }
   render(){
-    if(this.state.resubmission)
+    if(this.state.loading)
+    return(
+      <div style={{display:'flex',width:'100%',height:'600px',alignItems:'center',justifyContent:'center'}}>
+        <img src={require('../Images/loader2.gif')} style={{width:'70px',height:'70px'}}/>
+      </div> 
+    )
+    else if(this.state.resubmission)
     return(
       <div id="notfound">
         <div className="notfound">
@@ -53,18 +61,23 @@ class VolunteerPage extends React.Component{
         </div>
 	    </div>
     )
-    else
+    else if(!this.state.resubmission)
     return(
-        <div style={{zIndex:'1'}} >
-            <Grid container
-                style={{display:'inline-flex',zIndex:'2'}}>
-                <Profile firebase={firebase}/>
-                <QuesAns />
-                <Mes_Notif signOut={this.signOut}/>
-            </Grid>
+        <div style={{zIndex:'1'}}>
+            <Profile firebase={firebase} signOut={this.signOut} />
+            <QuesAns {...this.state} />
+            <Mes_Notif  />
         </div>
     );
   }
 }
 
-export default withRouter(VolunteerPage);
+export default (VolunteerPage);
+/*
+<Grid container
+                style={{display:'inline-flex',zIndex:'2'}}>
+                <Profile firebase={firebase}/>
+                <QuesAns />
+                <Mes_Notif signOut={this.signOut}/>
+            </Grid>
+*/

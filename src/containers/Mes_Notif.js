@@ -22,7 +22,7 @@ export const Mes_Notif=(props)=>{
           <Avatar alt="msg" style={{cursor:'pointer'}} src={require("../Images/blue.svg")} className={classes.bigAvatar}/>
           <Avatar alt="msg" style={{cursor:'pointer'}} src={require("../Images/notif.jpg")} className={classes.bigAvatar}/>
           <Avatar alt="msg" style={{cursor:'pointer'}} src={require("../Images/settings2.png")} className={classes.bigAvatar}/> 
-          <Avatar alt="msg" style={{cursor:'pointer'}} onClick={props.signOut} src={require("../Images/signout.png")} className={classes.bigAvatar}/> 
+          <Avatar alt="msg" style={{cursor:'pointer'}} src={require("../Images/signout.png")} className={classes.bigAvatar}/> 
         </div>
     )
 }

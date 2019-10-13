@@ -1,15 +1,15 @@
 import React from 'react';
 //import { NavLink } from "react-router-dom";
-import { Button,Avatar ,makeStyles,Tooltip} from "@material-ui/core";
+import icon from '../icon.svg'
+import { Button,Avatar ,makeStyles,Tooltip,Menu,MenuItem} from "@material-ui/core";
 import Popup from "reactjs-popup";
 const useStyles = makeStyles({
     avatar: {
       margin: 10,
     },
     bigAvatar: {
-      margin: 50,
-      width: 150,
-      height: 150,
+      width: 40,
+      height: 40,
     },
   });
   
@@ -24,9 +24,48 @@ export const Profile=(props)=>{
     str.ref().child('images').put(e.target.files[0]).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{db.collection("answeredques").doc(user.displayName).set({urlImgProfile:url},{merge:true})}))
   }
   const classes = useStyles();
-   
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return(
-        <div className='Profile-header'>
+    <div className='Searchbar-header'>
+      <p style={{color:'white',fontSize:'120%',marginLeft:'2%'}}>Squery</p>
+      <input type='text' className='Searchbar-search' placeholder='What&apos;s your question? ' />
+      <Button variant='contained' style={{backgroundColor:'rgba(219, 230, 235, 0.966)',height:'33px',left:'1%'}} ><img src={icon} /></Button>
+      <div style={{width:'50%'}}>
+        <Tooltip title="click to change or set profile picture" placement="bottom">
+          <Avatar alt="Profile-pic" style={{cursor:'pointer',margin:'auto 10% auto auto'}} type="file" className={classes.bigAvatar} onClick={handleClick} aria-controls='simple-menu' />
+        </Tooltip>  
+        <Menu
+            getContentAnchorEl={null}
+            id="simple-menu"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+            >
+            <MenuItem style={{height:'-30px'}}>Profile</MenuItem>
+            <MenuItem >My account</MenuItem>
+            <MenuItem onClick={props.signOut} >Logout</MenuItem>
+          </Menu>
+      </div>
+    </div>
+  )
+}
+/*
+<div className='Profile-header'>
           <Tooltip title="click to change or set profile picture" placement="bottom">
             <Avatar alt="Profile-pic" style={{cursor:'pointer'}} type="file" className={classes.bigAvatar} onChange={()=>storeImg} />
           </Tooltip>
@@ -53,5 +92,4 @@ export const Profile=(props)=>{
             </Popup>    
           </div>
       </div>
-  )
-}
+  */

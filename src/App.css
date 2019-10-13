@@ -1,7 +1,9 @@
 .Searchbar-header{
   display: inline-flex;
   background-color:rgba(0, 134, 196, 0.966);
-  width: 100%;
+  width: 100vw;
+  z-index: 3;
+  position: fixed;
   align-items: center;
 }
 .Profile-header{
@@ -35,7 +37,6 @@
   width:500px;
   border-radius: 5px;
   border-width: 1px;
-  margin-right: 4px;
   text-indent: 6px;
 }
 .Searchbar-login{

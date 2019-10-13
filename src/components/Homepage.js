@@ -7,6 +7,7 @@ import { ThemeProvider } from 'styled-components';
 import firebase from '../firebase';
 import { homepageOnLoad } from "../actions/action";
 import { QuestionList } from "../containers/QuestionList";
+import { QuesAns } from "../containers/QuesAns";
 const mapDispatchToProps=(dispatch)=>{
     return bindActionCreators({
         homepageOnLoad
@@ -59,9 +60,8 @@ class Homepage extends Component{
             <div>
                 <Searchbar/>
                 <div>
-                    <h2>&nbsp;&nbsp;Frequently Asked Questions...</h2>
                     <div>
-                        <QuestionList qna={this.props.qna}/>
+                        <QuesAns />
                     </div>
                     <div>
                         <ThemeProvider theme={{ background: '#f5f8fb',
