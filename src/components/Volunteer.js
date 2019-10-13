@@ -1,27 +1,12 @@
 import React,{Component} from 'react';
-import {bindActionCreators} from 'redux';
-import { connect } from "react-redux";
-import { loggingIn,loggingOut } from "../actions/action";
 import {Account} from '../containers/Account';
 import { Button,Snackbar } from "@material-ui/core";
 import firebase from "../firebase";
 import background2 from '../Images/background2.jpg';
-import VolunteerPage from './VolunteerPage';
-const mapDispatchToProps=(dispatch)=>{
-    return bindActionCreators({
-        loggingIn,loggingOut
-    },dispatch)
-}
-const mapStateToProps=(store)=>{
-    return({
-        loggedIn:store.loggedIn,
-        user:store.user
-    })
-}
 class Volunteer extends Component{
     constructor(props){
         super(props)
-        this.state={a:'blanket3',info:true,b:'Volunteer3',opacity:'1',uname:"",pass:"",email:"",popup:false}
+        this.state={a:'blanket3',info:true,b:'Volunteer3',opacity:'1',uname:"",pass:"",email:"",popup:false,loading:false}
     }
     componentDidMount(){
         console.log(this.props.user)
@@ -52,6 +37,7 @@ class Volunteer extends Component{
     {
         var exist=false;
         const auth=firebase.auth();
+        this.setState({loading:true})
         const db=firebase.firestore();
         db.collection("answerdques").get().then((query)=>
         {   
@@ -78,20 +64,20 @@ class Volunteer extends Component{
                                             console.log(auth);
                                             this.setState({popup:true});
                                             auth.currentUser.updateProfile({displayName:this.state.uname});
-                                            this.setState({email:"",uname:"",pass:""});
+                                            this.setState({email:"",uname:"",pass:"",loading:false});
                                         }).catch(function(error) {
-                                        this.setState({email:"",uname:"",pass:""});
+                                        this.setState({email:"",uname:"",pass:"",loading:false});
                                         console.log(error);
                                     })
                                 }).catch((error)=> {
-                            this.setState({email:"",uname:"",pass:""});
+                            this.setState({email:"",uname:"",pass:"",loading:false});
                             console.log(error.code);
                             alert(error.message);
                             
                         });
                     }
                     else{
-                        this.setState({email:"",uname:"",pass:""});
+                        this.setState({email:"",uname:"",pass:"",loading:false});
                         alert('Invalid Username');
                     }
                       
@@ -110,7 +96,7 @@ class Volunteer extends Component{
         var match=false;
         const auth=firebase.auth();
         const db=firebase.firestore();
-      
+        this.setState({loading:true})
         db.collection("answeredques").get().then((query)=>{
             query.forEach((doc)=>{
                 //console.log(doc.data().email)
@@ -126,22 +112,21 @@ class Volunteer extends Component{
                     (res)=>{
                         if(auth.currentUser.emailVerified){
                             this.props.history.push(`/Volunteer/${this.state.uname}`)
-                            this.setState({loggedIn:true})
-                            this.setState({uname:"",pass:""})
+                            this.setState({uname:"",pass:"",loading:false})
                         }
                         else{
                             alert("Unverified account")
-                            this.setState({uname:"",pass:""})
+                            this.setState({uname:"",pass:"",loading:false})
                         }
                     }).catch((error)=>{
                         alert(error.message);
-                        this.setState({uname:"",pass:""})
+                        this.setState({uname:"",pass:"",loading:false})
                     })
                 })
             }
             else{
                 alert("username not found / SignUp")
-                this.setState({uname:"",pass:""})
+                this.setState({uname:"",pass:"",loading:false})
             }
         })
     }
@@ -175,7 +160,7 @@ class Volunteer extends Component{
                 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"></link>
                 <div className={`${this.state.b}`}>
                
-                    <Account submitSignIn={this.addUserSignIn} submitSignUp={this.addUserSignUp} {...this.state} uname={this.state.uname} pass={this.state.pass} change={this.handlechange} email={this.state.email}/>
+                    <Account submitSignIn={this.addUserSignIn} submitSignUp={this.addUserSignUp} {...this.state} change={this.handlechange} />
                     
                 </div>
                 <div className={`${this.state.a}`} style={{textAlign:'center',borderRadius:'10px',justifyItems:'center',display:'flex',backgroundImage:`url(${background2})`}}>
@@ -193,11 +178,11 @@ class Volunteer extends Component{
                     }}
                     style={{backgroundColor:"#1100BB"}}
                     variant="information"
-                    autoHideDuration={5000}
-                    message={<span id="message-id">Email sent verify email</span>}
+                    autoHideDuration={2000}
+                    message={<span id="message-id">Verification mail sent !</span>}
                 />
             </div>
         )
     }
 }
-export default connect(mapStateToProps,mapDispatchToProps)(Volunteer);
+export default (Volunteer);

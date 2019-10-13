@@ -8,29 +8,28 @@ import firebase from "../firebase";
 class VolunteerPage extends React.Component{
   constructor(props){
     super(props)
-    this.state={resubmission:false}
+    this.state={resubmission:true}
   }
   componentDidMount(){
     console.log(this.props)
-        firebase.auth().onAuthStateChanged((user)=> {
-          console.log(user)
-          if (user) {
-            // User is signed in.
-            console.log(user.displayName);
-            console.log(user.email);
-            console.log(user.emailVerified);
-            console.log(user.photoURL);
-            console.log(user.isAnonymous);
-            console.log(user.uid);
-            console.log(user.providerData);
-
-          }
-          else {
-            console.log("user signed out");
-            this.setState({resubmission:true})
-          }
-        });
-        //console.log(firebase.auth().currentUser.displayName);
+    firebase.auth().onAuthStateChanged((user)=> {
+      console.log(user)
+      if (user) {
+        // User is signed in.
+        console.log(user.displayName);
+        console.log(user.email);
+        console.log(user.emailVerified);
+        console.log(user.photoURL);
+        console.log(user.isAnonymous);
+        console.log(user.uid);
+        console.log(user.providerData);
+        this.setState({resubmission:false})
+      }
+      else {
+        console.log("user signed out");
+      }
+    });
+    //console.log(firebase.auth().currentUser.displayName);
   }
   
   signOut=()=>{
