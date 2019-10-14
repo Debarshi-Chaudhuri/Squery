@@ -11,7 +11,7 @@ export const QuesAns=(props)=>{
     else
     h1='Questions You Have Answered'
     return(
-        <div style={{width:'80%',marginLeft:'3%',padding:'5%',zIndex:'2'}}>
+        <div style={{width:'80%',marginLeft:'2%',padding:'55px',zIndex:'2'}}>
             <h1>{h1}</h1>
             <div>{
                 a.map((items)=><p>{items}<hr></hr></p>)
