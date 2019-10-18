@@ -5,7 +5,6 @@ import {QuesAns} from "../containers/QuesAns";
 import {withRouter} from "react-router-dom";
 import { Button,Avatar ,makeStyles,Grid, Container} from "@material-ui/core";
 import firebase from "../firebase";
-import '../VolunPage.css'
 class VolunteerPage extends React.Component{
   constructor(props){
     super(props)
