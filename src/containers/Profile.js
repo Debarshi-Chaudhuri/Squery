@@ -70,9 +70,11 @@ export const Profile=(props)=>{
       width: 250,
     },
   });
+  const user=props.firebase.auth().currentUser;
   const [state, setState] = React.useState({
     right: false,
-    avatar:null
+    pic:null,
+    avatar:user.photoURL
   });
   const [open, setOpen] = React.useState(false);
 
@@ -81,11 +83,12 @@ export const Profile=(props)=>{
   };
   const handleClose = () => {
     setOpen(false);
-    const user=props.firebase.auth().currentUser;
+   // const user=props.firebase.auth().currentUser;
     //console.log(user);
     const str=props.firebase.storage();
     const db=props.firebase.firestore();
-    str.ref().child('images').put(state.avatar).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{db.collection("answeredques").doc(user.displayName).set({urlImgProfile:url},{merge:true})}))
+    str.ref().child(`${user.displayName}`).put(state.pic).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{db.collection("answeredques").doc(user.displayName).set({urlImgProfile:url},{merge:true}).then(()=>{user.updateProfile({photoURL:url});setState({...state,avatar:url})})}))
+   
   };
 
   const toggleDrawer = (side, open) => event => {
@@ -95,16 +98,7 @@ export const Profile=(props)=>{
 
     setState({ ...state, [side]: open });
   };
-
   const classes = useStyles();
-  const storeImg=(e)=>
-  {
-    const user=props.firebase.auth().currentUser;
-    //console.log(user);
-    const str=props.firebase.storage();
-    const db=props.firebase.firestore();
-    str.ref().child('images').put(e.target.files[0]).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{db.collection("answeredques").doc(user.displayName).set({urlImgProfile:url},{merge:true})}))
-  }
   const listClick = event =>{
     console.log(event.target.id)
     if(event.target.id==='Add Profile Picture')
@@ -113,13 +107,15 @@ export const Profile=(props)=>{
       handleClickOpen();
        // setState({...state,avatar:event.target.files[0]})
     }
+    else if(event.target.id==='Settings')
+    {
+      
+    }
    else if(event.target.id==='Logout')
     props.signOut()
   }
   const sideList = side => (
-    <div
-      className={classes.list}
-    >
+    <div className={classes.list}>
       <List>
         {['Profile','Add Profile Picture', 'Messages', 'Add Post', 'Logout'].map((text, index) => (
           <ListItem button key={text} id={`${text}`} style={{height:'50px'}} onClick={listClick}>
@@ -139,22 +135,23 @@ export const Profile=(props)=>{
   );
  const handleAvatar=(e)=>
   {
-    setState({...state,avatar:e.target.files[0]})
+    setState({...state,pic:e.target.files[0]})
   }
   const loadFirst=()=>
   {
     const db=props.firebase.firestore();
-    const user=props.firebase.auth().currentUser;
-    console.log(db.collection("answeredques").doc(user.displayName).get());
+    //const user=props.firebase.auth().currentUser;
+    console.log(user.photoURL)
+    //setState({...state,avatar:user.photoURL})
   }
   return(
-    <div className='Searchbar-header' onLoad={loadFirst}>
+    <div className='Searchbar-header' onLoad={loadFirst()}>
       <p style={{color:'white',fontSize:'120%',marginLeft:'2%'}}>Squery</p>
       <input type='text' className='Searchbar-search' placeholder='What&apos;s your question? ' />
       <Button variant='contained' style={{backgroundColor:'rgba(219, 230, 235, 0.966)',height:'33px',left:'1%'}} ><img src={icon} /></Button>
       <div style={{width:'40%',display:'inline-flex',alignItems:'center'}}>
         <Tooltip title="click to change or set profile picture" placement="bottom">
-          <Avatar alt="Profile-pic" style={{cursor:'pointer',margin:'auto 5px auto auto'}} type="file" className={classes.bigAvatar} onClick={toggleDrawer('right', true)} src={state.avatar}/>
+          <Avatar alt="Profile-pic" style={{cursor:'pointer',margin:'auto 5px auto auto'}} type="file" className={classes.bigAvatar} onClick={toggleDrawer('right', true)} src={`${state.avatar}`}/>
         </Tooltip>  
       </div>
       <SwipeableDrawer
@@ -171,7 +168,7 @@ export const Profile=(props)=>{
         </DialogTitle>
         <DialogContent dividers>
           <div style={{width:"40%"}}>
-            <Avatar alt="No profile picture" style={{width:"300px",height:"300px"}}/>
+            <Avatar alt="No profile picture" style={{width:"300px",height:"300px"}} src={`${state.avatar}`}/>
           </div>
           
         </DialogContent>
