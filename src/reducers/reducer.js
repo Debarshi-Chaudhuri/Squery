@@ -1,7 +1,7 @@
 const initialState={
     qna:[],
     loggedIn:false,
-    user:{}
+    userData:{}
 }
 export const reducer=(state=initialState,action)=>{
     switch(action.type){
@@ -16,6 +16,10 @@ export const reducer=(state=initialState,action)=>{
         case 'LOGGING_OUT':
             return{
                 ...state,loggedIn:false,user:{}
+            }
+        case 'PROFILE_LOAD':
+            return{
+                ...state,userData:action.payload
             }
         default:
             return state;

@@ -16,3 +16,9 @@ export const loggingOut=()=>{
         type:'LOGGING_OUT'
     })
 }
+export const profileLoad=(user)=>{
+    return({
+        type:'PROFILE_LOAD',
+        payload:user
+    })
+}

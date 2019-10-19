@@ -60,14 +60,27 @@ export const Profile=(props)=>{
   const [open, setOpen] = React.useState(false);
   const [state, setState] = React.useState({
     right: false,
-    image:require('../Images/msg.png')
+    image:props.userData.profilePic,
+    prevImage:require('../Images/msg.png')
   });
+  console.log(props.userData.profilePic);
   const handleClickOpen = () => {
     setOpen(true);
   };
-  const handleClose = () => {
+  const handleClose = (val) => {
     setOpen(false);
+    if(val){
+      const user=props.firebase.auth().currentUser;
+      //console.log(user);
+      const str=props.firebase.storage();
+      const db=props.firebase.firestore();
+      str.ref().child(`${user.displayName}`).put(state.prevImage).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{setState({ ...state, image: url });}));
+    }
   };
+
+  const load=()=>{
+    console.log('AAAAAAAAAAA')
+  }
 
   const useStyles = makeStyles({
     avatar: {
@@ -92,12 +105,14 @@ export const Profile=(props)=>{
   };
 
   const classes = useStyles();
+
+  
   const tempStoreImg=(e)=>{
     const user=props.firebase.auth().currentUser;
     //console.log(user);
     const str=props.firebase.storage();
     const db=props.firebase.firestore();
-    str.ref().child('images').put(e.target.files[0]).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{setState({ ...state, image: url });}));   
+    str.ref().child(`${user.displayName}`).put(e.target.files[0]).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{setState({ ...state,prevImage:state.image,image: url });}));   
   }
   const storeImg=()=>
   {
@@ -105,7 +120,10 @@ export const Profile=(props)=>{
     console.log(state.image);
     const str=props.firebase.storage();
     const db=props.firebase.firestore();
-    str.ref().child('images').put(state.image).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{db.collection("answeredques").doc(user.displayName).set({profilePic:url},{merge:true})}));
+    str.ref().child(`${user.displayName}`).getDownloadURL().then((url)=>{
+      db.collection("answeredques").doc(user.displayName).set({profilePic:url},{merge:true})
+      handleClose(false);
+    });
   }
   const listClick = event =>{
     console.log(event.target.id)
@@ -119,7 +137,16 @@ export const Profile=(props)=>{
       className={classes.list}
     >
       <List>
-        {['Profile','Change Profile Picture', 'Messages', 'Add Post', 'Logout'].map((text, index) => (
+        
+          <ListItem style={{height:'30px'}} onClick={listClick}>
+            <p><b>Signed-In As </b></p>
+          </ListItem>
+          <ListItem style={{height:'30px'}} onClick={listClick}>
+            <p>{props.firebase.auth().currentUser.displayName}</p>
+          </ListItem>
+      </List>  
+      <List>
+        {['Change Profile Picture', 'Messages', 'Add Post', 'Logout'].map((text, index) => (
           <ListItem button key={text} id={`${text}`} style={{height:'50px'}} onClick={listClick}>
             {text}
           </ListItem>
@@ -142,7 +169,7 @@ export const Profile=(props)=>{
       <Button variant='contained' style={{backgroundColor:'rgba(219, 230, 235, 0.966)',height:'33px',left:'1%'}} ><img src={icon} /></Button>
       <div style={{width:'40%',display:'inline-flex',alignItems:'center'}}>
         <Tooltip title="click to change or set profile picture" placement="bottom">
-          <Avatar alt="Profile-pic" style={{cursor:'pointer',margin:'auto 5px auto auto'}} type="file" className={classes.bigAvatar} onClick={toggleDrawer('right', true)} />
+          <Avatar alt="Profile-pic" imgProps={load} style={{cursor:'pointer',margin:'auto 5px auto auto'}} type="file" className={classes.bigAvatar} onClick={toggleDrawer('right', true)} src={`${state.image}`} />
         </Tooltip>  
       </div>
       <SwipeableDrawer
@@ -153,7 +180,7 @@ export const Profile=(props)=>{
       >
         {sideList('right')}
       </SwipeableDrawer>
-      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+      <Dialog onClose={()=>handleClose(true)} aria-labelledby="customized-dialog-title" open={open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           Change Avatar
         </DialogTitle>
