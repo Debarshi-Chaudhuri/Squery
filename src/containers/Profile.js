@@ -1,9 +1,7 @@
 import React from 'react';
-//import { NavLink } from "react-router-dom";
 import icon from '../icon.svg'
-import { Button,Avatar ,makeStyles,Tooltip,SwipeableDrawer,List,ListItemText,ListItem,Divider,Dialog} from "@material-ui/core";
-import {ArrowDropDown} from '@material-ui/icons'
-import Popup from "reactjs-popup";
+import { Button,Avatar ,makeStyles,Tooltip,SwipeableDrawer,List,ListItemText,ListItem,Divider} from "@material-ui/core";
+import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
@@ -11,11 +9,12 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+
+
 const styles = theme => ({
   root: {
     margin: 0,
     padding: theme.spacing(2),
-    width:600
   },
   closeButton: {
     position: 'absolute',
@@ -24,6 +23,7 @@ const styles = theme => ({
     color: theme.palette.grey[500],
   },
 });
+
 const DialogTitle = withStyles(styles)(props => {
   const { children, classes, onClose, ...other } = props;
   return (
@@ -38,13 +38,11 @@ const DialogTitle = withStyles(styles)(props => {
   );
 });
 
-
 const DialogContent = withStyles(theme => ({
   root: {
     padding: theme.spacing(2),
-    justifyContent:"center",
-    display:'flex'
-  //  width:1000
+    display:'flex',
+    justifyContent:'center'
   },
 }))(MuiDialogContent);
 
@@ -54,9 +52,35 @@ const DialogActions = withStyles(theme => ({
     padding: theme.spacing(1),
   },
 }))(MuiDialogActions);
+//PrisonMike.jpeg
+//msg.png
 
 export const Profile=(props)=>{
   console.log(props)
+  const [open, setOpen] = React.useState(false);
+  const [state, setState] = React.useState({
+    right: false,
+    image:props.userData.profilePic,
+    prevImage:require('../Images/msg.png')
+  });
+  console.log(props.userData.profilePic);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = (val) => {
+    setOpen(false);
+    if(val){
+      const user=props.firebase.auth().currentUser;
+      //console.log(user);
+      const str=props.firebase.storage();
+      const db=props.firebase.firestore();
+      str.ref().child(`${user.displayName}`).put(state.prevImage).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{setState({ ...state, image: url });}));
+    }
+  };
+
+  const load=()=>{
+    console.log('AAAAAAAAAAA')
+  }
 
   const useStyles = makeStyles({
     avatar: {
@@ -70,26 +94,7 @@ export const Profile=(props)=>{
       width: 250,
     },
   });
-  const user=props.firebase.auth().currentUser;
-  const [state, setState] = React.useState({
-    right: false,
-    pic:null,
-    avatar:user.photoURL
-  });
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-   // const user=props.firebase.auth().currentUser;
-    //console.log(user);
-    const str=props.firebase.storage();
-    const db=props.firebase.firestore();
-    str.ref().child(`${user.displayName}`).put(state.pic).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{db.collection("answeredques").doc(user.displayName).set({urlImgProfile:url},{merge:true}).then(()=>{user.updateProfile({photoURL:url});setState({...state,avatar:url})})}))
-   
-  };
+  
 
   const toggleDrawer = (side, open) => event => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -98,26 +103,50 @@ export const Profile=(props)=>{
 
     setState({ ...state, [side]: open });
   };
+
   const classes = useStyles();
+
+  
+  const tempStoreImg=(e)=>{
+    const user=props.firebase.auth().currentUser;
+    //console.log(user);
+    const str=props.firebase.storage();
+    const db=props.firebase.firestore();
+    str.ref().child(`${user.displayName}`).put(e.target.files[0]).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{setState({ ...state,prevImage:state.image,image: url });}));   
+  }
+  const storeImg=()=>
+  {
+    const user=props.firebase.auth().currentUser;
+    console.log(state.image);
+    const str=props.firebase.storage();
+    const db=props.firebase.firestore();
+    str.ref().child(`${user.displayName}`).getDownloadURL().then((url)=>{
+      db.collection("answeredques").doc(user.displayName).set({profilePic:url},{merge:true})
+      handleClose(false);
+    });
+  }
   const listClick = event =>{
     console.log(event.target.id)
-    if(event.target.id==='Add Profile Picture')
-    {
-      console.log('YOOOOOOOOOO');
-      handleClickOpen();
-       // setState({...state,avatar:event.target.files[0]})
-    }
-    else if(event.target.id==='Settings')
-    {
-      
-    }
-   else if(event.target.id==='Logout')
+    if(event.target.id==='Logout')
     props.signOut()
+    else if(event.target.id==='Change Profile Picture')
+    handleClickOpen();
   }
   const sideList = side => (
-    <div className={classes.list}>
+    <div
+      className={classes.list}
+    >
       <List>
-        {['Profile','Add Profile Picture', 'Messages', 'Add Post', 'Logout'].map((text, index) => (
+        
+          <ListItem style={{height:'30px'}} onClick={listClick}>
+            <p><b>Signed-In As </b></p>
+          </ListItem>
+          <ListItem style={{height:'30px'}} onClick={listClick}>
+            <p>{props.firebase.auth().currentUser.displayName}</p>
+          </ListItem>
+      </List>  
+      <List>
+        {['Change Profile Picture', 'Messages', 'Add Post', 'Logout'].map((text, index) => (
           <ListItem button key={text} id={`${text}`} style={{height:'50px'}} onClick={listClick}>
             {text}
           </ListItem>
@@ -133,25 +162,14 @@ export const Profile=(props)=>{
       </List>
     </div>
   );
- const handleAvatar=(e)=>
-  {
-    setState({...state,pic:e.target.files[0]})
-  }
-  const loadFirst=()=>
-  {
-    const db=props.firebase.firestore();
-    //const user=props.firebase.auth().currentUser;
-    console.log(user.photoURL)
-    //setState({...state,avatar:user.photoURL})
-  }
   return(
-    <div className='Searchbar-header' onLoad={loadFirst()}>
+    <div className='Searchbar-header'>
       <p style={{color:'white',fontSize:'120%',marginLeft:'2%'}}>Squery</p>
       <input type='text' className='Searchbar-search' placeholder='What&apos;s your question? ' />
       <Button variant='contained' style={{backgroundColor:'rgba(219, 230, 235, 0.966)',height:'33px',left:'1%'}} ><img src={icon} /></Button>
       <div style={{width:'40%',display:'inline-flex',alignItems:'center'}}>
         <Tooltip title="click to change or set profile picture" placement="bottom">
-          <Avatar alt="Profile-pic" style={{cursor:'pointer',margin:'auto 5px auto auto'}} type="file" className={classes.bigAvatar} onClick={toggleDrawer('right', true)} src={`${state.avatar}`}/>
+          <Avatar alt="Profile-pic" imgProps={load} style={{cursor:'pointer',margin:'auto 5px auto auto'}} type="file" className={classes.bigAvatar} onClick={toggleDrawer('right', true)} src={`${state.image}`} />
         </Tooltip>  
       </div>
       <SwipeableDrawer
@@ -162,19 +180,18 @@ export const Profile=(props)=>{
       >
         {sideList('right')}
       </SwipeableDrawer>
-      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+      <Dialog onClose={()=>handleClose(true)} aria-labelledby="customized-dialog-title" open={open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           Change Avatar
         </DialogTitle>
         <DialogContent dividers>
-          <div style={{width:"40%"}}>
-            <Avatar alt="No profile picture" style={{width:"300px",height:"300px"}} src={`${state.avatar}`}/>
+          <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'350px',width:'400px'}}>
+            <img src={state.image} style={{maxHeight:'70%',maxWidth:'70%'}} />
           </div>
-          
         </DialogContent>
         <DialogActions>
-        <input type="file" style={{}} onChange={handleAvatar} />
-          <Button onClick={handleClose} color="primary">
+          <input type='file' onChange={tempStoreImg}/>
+          <Button onClick={storeImg} color="primary">
             Save changes
           </Button>
         </DialogActions>

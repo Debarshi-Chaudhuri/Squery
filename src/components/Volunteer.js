@@ -110,9 +110,17 @@ class Volunteer extends Component{
             if(match){
                 db.collection("answeredques").doc(`${this.state.uname}`).onSnapshot((doc)=>{ auth.signInWithEmailAndPassword(doc.data().email, this.state.pass).then(
                     (res)=>{
+                        
                         if(auth.currentUser.emailVerified){
-                            this.props.history.push(`/Volunteer/${this.state.uname}`)
-                            this.setState({uname:"",pass:"",loading:false})
+                            db.collection("answeredques").doc(`${this.state.uname}`).get().then(
+                                (query)=>{
+                                  console.log(query.data())
+                                  //this.props.profileLoad(query.data())
+                                  this.props.history.push(`/Volunteer/${this.state.uname}`,query.data())
+                                  this.setState({uname:"",pass:"",loading:false})
+                                }
+                              )
+                            
                         }
                         else{
                             alert("Unverified account")

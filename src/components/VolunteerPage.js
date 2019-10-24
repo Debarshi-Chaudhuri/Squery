@@ -1,29 +1,35 @@
 import React from "react";
+import {bindActionCreators} from 'redux';
+import { connect } from "react-redux";
+import { profileLoad } from "../actions/action.js";
 import {Profile} from "../containers/Profile";
 import {Mes_Notif} from "../containers/Mes_Notif";
 import {QuesAns} from "../containers/QuesAns";
-import {withRouter} from "react-router-dom";
-import { Button,Avatar ,makeStyles,Grid, Container} from "@material-ui/core";
+import QuesList from "../containers/QuestionList";
 import firebase from "../firebase";
-import '../VolunPage.css'
+
+const mapDispatchToProps=(dispatch)=>{
+  return bindActionCreators({
+    profileLoad
+  },dispatch)
+}
+const mapStateToProps=(store)=>{
+  return({
+      qna:store.qna,
+      userData:store.userData
+  })
+}
 class VolunteerPage extends React.Component{
   constructor(props){
     super(props)
     this.state={resubmission:false,loading:true,uname:''}
   }
   componentDidMount(){
-    console.log(this.props)
+    this.props.profileLoad(this.props.location.state)
+    const db=firebase.firestore();
     firebase.auth().onAuthStateChanged((user)=> {
       console.log(user)
       if (user) {
-        // User is signed in.
-        console.log(user.displayName);
-        console.log(user.email);
-        console.log(user.emailVerified);
-        console.log(user.photoURL);
-        console.log(user.isAnonymous);
-        console.log(user.uid);
-        console.log(user.providerData);
         this.setState({loading:false,uname:user.displayName})
       }
       else {
@@ -32,6 +38,9 @@ class VolunteerPage extends React.Component{
       }
     });
     //console.log(firebase.auth().currentUser.displayName);
+   // var jsondata=require("../qna.json");
+    //console.log(jsondata)
+   
   }
   
   signOut=()=>{
@@ -64,20 +73,18 @@ class VolunteerPage extends React.Component{
     else if(!this.state.resubmission)
     return(
         <div style={{zIndex:'1'}}>
-            <Profile firebase={firebase} signOut={this.signOut} />
-            <QuesAns {...this.state} />
+            <Profile firebase={firebase} signOut={this.signOut} {...this.props}/>
+            <QuesList {...this.state} firebase={firebase}/>
             <Mes_Notif  />
         </div>
     );
   }
 }
 
-export default (VolunteerPage);
+export default connect(mapStateToProps,mapDispatchToProps)(VolunteerPage);
 /*
-<Grid container
-                style={{display:'inline-flex',zIndex:'2'}}>
-                <Profile firebase={firebase}/>
-                <QuesAns />
-                <Mes_Notif signOut={this.signOut}/>
-            </Grid>
-*/
+db.collection("answeredques").doc('A').get().then(
+          (query)=>{
+            console.log(query)
+          }
+        )*/
