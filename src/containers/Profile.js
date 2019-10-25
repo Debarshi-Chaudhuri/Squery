@@ -61,8 +61,10 @@ export const Profile=(props)=>{
   const [state, setState] = React.useState({
     right: false,
     image:props.userData.profilePic,
-    prevImage:props.userData.profilePic
+    prevImage:props.userData.profilePic,
   });
+  const [file,setFile]=React.useState(null)
+
   console.log(props.userData.profilePic);
   const handleClickOpen = () => {
     setOpen(true);
@@ -71,9 +73,6 @@ export const Profile=(props)=>{
     
     setOpen(false);
     if(val){
-      //const db=props.firebase.firestore();
-      //str.ref().child(`temp${user.displayName}`).put(state.prevImage).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{setState({ ...state, image: url });}));
-
       setTimeout(()=>setState({...state,image:state.prevImage}),500)
     }
   };
@@ -105,57 +104,37 @@ export const Profile=(props)=>{
   };
 
   const classes = useStyles();
-
   
+
   const tempStoreImg=(e)=>{
     const user=props.firebase.auth().currentUser;
     //console.log(user);
     const str=props.firebase.storage();
     //const db=props.firebase.firestore();
-    str.ref().child(`temp${user.displayName}`).put(e.target.files[0]).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{setState({ ...state,image: url });}));   
+    console.log('A')
+    setFile(e.target.files[0])
+    str.ref().child(`temp${user.displayName}`).put(e.target.files[0]).then(
+      (snapshot)=>{
+        snapshot.ref.getDownloadURL().then(
+        (url)=>{
+          setState({ ...state,image: url});
+      })}
+    );   
   }
   const storeImg=()=>
   {
+    console.log(file)
     const user=props.firebase.auth().currentUser;
     console.log(state.image);
     const str=props.firebase.storage();
     const db=props.firebase.firestore();
     console.log(str.ref().child(`temp${user.displayName}`))
-    str.ref().child(`temp${user.displayName}`).getDownloadURL().then(function(url) {
-      // `url` is the download URL for 'images/stars.jpg'
-    
-      // This can be downloaded directly:
-      var xhr = new XMLHttpRequest();
-      xhr.responseType = 'blob';
-      xhr.onload = function(event) {
-        var blob = xhr.response;
-        str.ref().child(`${user.displayName}`).put(blob).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{
-          db.collection("answeredques").doc(user.displayName).set({profilePic:url},{merge:true})
-          setState({ ...state,image: url,prevImage:url })
-          handleClose(false);
-       ;}));
-      };
-      xhr.open('GET', url);
-      xhr.send();
-    
-      // Or inserted into an <img> element:
-      var img = document.getElementById('myimg');
-      img.src = url;
-    }).catch(function(error) {
-      alert(error)
-    });
 
-    /*str.ref().child(`${user.displayName}`).put(state.image).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{
+    str.ref().child(`${user.displayName}`).put(file).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{
       db.collection("answeredques").doc(user.displayName).set({profilePic:url},{merge:true})
       setState({ ...state,image: url,prevImage:url })
       handleClose(false);
-   ;}));*/
-    
-    /*str.ref().child(`${user.displayName}`).getDownloadURL().then((url)=>{
-      db.collection("answeredques").doc(user.displayName).set({profilePic:url},{merge:true})
-      setState({...state,image:url,prevImage:url});
-      handleClose(false);
-    });*/
+   ;}));
   }
   const listClick = event =>{
     console.log(event.target.id)

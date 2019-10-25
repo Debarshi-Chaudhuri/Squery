@@ -26,7 +26,6 @@ class VolunteerPage extends React.Component{
   }
   componentDidMount(){
     this.props.profileLoad(this.props.location.state)
-    const db=firebase.firestore();
     firebase.auth().onAuthStateChanged((user)=> {
       console.log(user)
       if (user) {
@@ -87,4 +86,5 @@ db.collection("answeredques").doc('A').get().then(
           (query)=>{
             console.log(query)
           }
+          TO CHECK IF A USER EXISTS
         )*/
