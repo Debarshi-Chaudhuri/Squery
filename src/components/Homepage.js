@@ -6,7 +6,7 @@ import { Searchbar } from "../containers/Searchbar";
 import { ThemeProvider } from 'styled-components';
 import firebase from '../firebase';
 import { homepageOnLoad } from "../actions/action";
-import { QuestionList } from "../containers/QuestionList";
+import QuesList  from "../containers/QuestionList";
 import { QuesAns } from "../containers/QuesAns";
 const mapDispatchToProps=(dispatch)=>{
     return bindActionCreators({
@@ -61,7 +61,7 @@ class Homepage extends Component{
                 <Searchbar/>
                 <div>
                     <div>
-                        <QuesAns />
+                        <QuesList />
                     </div>
                     <div>
                         <ThemeProvider theme={{ background: '#f5f8fb',

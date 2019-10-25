@@ -1,19 +1,17 @@
 import React from 'react';
-export const QuestionList=(props)=>{
-    console.log(props.qna)
-    return(
-        <div>{
-            props.qna.map((qna)=>{
-                return (
-                    <div className='Qna-div'>
-                        <ul>
-                            <p>Question : {qna.ques}</p>
-                            <p>Answer : {qna.ans}</p>
-                        </ul>
-                        <hr></hr>
-                    </div>
-                )
-            })
-        }</div>
-    )
+import {QuesItem} from "./QuesItem";
+class QuesList extends React.Component{
+    render()
+    {
+        var jsondata=require("../qna.json");
+        return(
+            <div style={{width:'80%',marginLeft:'2%',padding:'55px',zIndex:'2'}}>
+            <h1>"Questions You have answered:"</h1>
+            <div>{
+                jsondata.qna.map((items)=><QuesItem items={items}/>)
+            }</div>
+        </div>
+        );
+    }
 }
+export default QuesList;

@@ -56,25 +56,25 @@ const DialogActions = withStyles(theme => ({
 //msg.png
 
 export const Profile=(props)=>{
-  console.log(props)
+  //console.log(props)
   const [open, setOpen] = React.useState(false);
   const [state, setState] = React.useState({
     right: false,
     image:props.userData.profilePic,
-    prevImage:require('../Images/msg.png')
+    prevImage:props.userData.profilePic
   });
   console.log(props.userData.profilePic);
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = (val) => {
+    
     setOpen(false);
     if(val){
-      const user=props.firebase.auth().currentUser;
-      //console.log(user);
-      const str=props.firebase.storage();
-      const db=props.firebase.firestore();
-      str.ref().child(`${user.displayName}`).put(state.prevImage).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{setState({ ...state, image: url });}));
+      //const db=props.firebase.firestore();
+      //str.ref().child(`temp${user.displayName}`).put(state.prevImage).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{setState({ ...state, image: url });}));
+
+      setTimeout(()=>setState({...state,image:state.prevImage}),500)
     }
   };
 
@@ -111,8 +111,8 @@ export const Profile=(props)=>{
     const user=props.firebase.auth().currentUser;
     //console.log(user);
     const str=props.firebase.storage();
-    const db=props.firebase.firestore();
-    str.ref().child(`${user.displayName}`).put(e.target.files[0]).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{setState({ ...state,prevImage:state.image,image: url });}));   
+    //const db=props.firebase.firestore();
+    str.ref().child(`temp${user.displayName}`).put(e.target.files[0]).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{setState({ ...state,image: url });}));   
   }
   const storeImg=()=>
   {
@@ -120,10 +120,42 @@ export const Profile=(props)=>{
     console.log(state.image);
     const str=props.firebase.storage();
     const db=props.firebase.firestore();
-    str.ref().child(`${user.displayName}`).getDownloadURL().then((url)=>{
-      db.collection("answeredques").doc(user.displayName).set({profilePic:url},{merge:true})
-      handleClose(false);
+    console.log(str.ref().child(`temp${user.displayName}`))
+    str.ref().child(`temp${user.displayName}`).getDownloadURL().then(function(url) {
+      // `url` is the download URL for 'images/stars.jpg'
+    
+      // This can be downloaded directly:
+      var xhr = new XMLHttpRequest();
+      xhr.responseType = 'blob';
+      xhr.onload = function(event) {
+        var blob = xhr.response;
+        str.ref().child(`${user.displayName}`).put(blob).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{
+          db.collection("answeredques").doc(user.displayName).set({profilePic:url},{merge:true})
+          setState({ ...state,image: url,prevImage:url })
+          handleClose(false);
+       ;}));
+      };
+      xhr.open('GET', url);
+      xhr.send();
+    
+      // Or inserted into an <img> element:
+      var img = document.getElementById('myimg');
+      img.src = url;
+    }).catch(function(error) {
+      alert(error)
     });
+
+    /*str.ref().child(`${user.displayName}`).put(state.image).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{
+      db.collection("answeredques").doc(user.displayName).set({profilePic:url},{merge:true})
+      setState({ ...state,image: url,prevImage:url })
+      handleClose(false);
+   ;}));*/
+    
+    /*str.ref().child(`${user.displayName}`).getDownloadURL().then((url)=>{
+      db.collection("answeredques").doc(user.displayName).set({profilePic:url},{merge:true})
+      setState({...state,image:url,prevImage:url});
+      handleClose(false);
+    });*/
   }
   const listClick = event =>{
     console.log(event.target.id)
@@ -181,7 +213,7 @@ export const Profile=(props)=>{
         {sideList('right')}
       </SwipeableDrawer>
       <Dialog onClose={()=>handleClose(true)} aria-labelledby="customized-dialog-title" open={open}>
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+        <DialogTitle id="customized-dialog-title" onClose={()=>handleClose(true)}>
           Change Avatar
         </DialogTitle>
         <DialogContent dividers>

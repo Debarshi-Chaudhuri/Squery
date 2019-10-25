@@ -5,7 +5,9 @@ import { profileLoad } from "../actions/action.js";
 import {Profile} from "../containers/Profile";
 import {Mes_Notif} from "../containers/Mes_Notif";
 import {QuesAns} from "../containers/QuesAns";
+import QuesList from "../containers/QuestionList";
 import firebase from "../firebase";
+
 const mapDispatchToProps=(dispatch)=>{
   return bindActionCreators({
     profileLoad
@@ -36,6 +38,9 @@ class VolunteerPage extends React.Component{
       }
     });
     //console.log(firebase.auth().currentUser.displayName);
+   // var jsondata=require("../qna.json");
+    //console.log(jsondata)
+   
   }
   
   signOut=()=>{
@@ -69,7 +74,7 @@ class VolunteerPage extends React.Component{
     return(
         <div style={{zIndex:'1'}}>
             <Profile firebase={firebase} signOut={this.signOut} {...this.props}/>
-            <QuesAns {...this.state} />
+            <QuesList {...this.state} firebase={firebase}/>
             <Mes_Notif  />
         </div>
     );
