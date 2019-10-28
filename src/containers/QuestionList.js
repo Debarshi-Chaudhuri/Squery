@@ -6,28 +6,34 @@ export const QuesList =(props)=>{
     const [bool,setState]=React.useState(false)
     const db=firebase.firestore();
     React.useEffect(()=>{
-    if(props.uname!==undefined){
-        //db.collection('answeredques').doc(this.props.uname).collection('qna').onSnapshot((snapshot)=>snapshot.docs.forEach((doc)=>console.log(doc.data())))
-        db.collection('answeredques').doc(props.uname).collection('questions').get().then(
-            (query)=>{
-                query.forEach((doc)=>{
-                    props.questionsLoad(doc.data())
-                    setState(false)
-                })
-            }
-        )
-    }
-    else{
-        db.collection('questions').onSnapshot(
-            (snapshot)=>{
-                snapshot.docs.forEach((doc)=>{
-                    props.questionsLoad(doc.data())
-                    console.log('a')
+        console.log(props)
+        if(props.uname!==undefined){
+            //db.collection('answeredques').doc(this.props.uname).collection('qna').onSnapshot((snapshot)=>snapshot.docs.forEach((doc)=>console.log(doc.data())))
+            db.collection('answeredques').doc(props.uname).collection('questions').get().then(
+                (query)=>{
+                    let a=[]
+                    query.forEach((doc)=>{
+                        a=[doc.data(),...a]
+                    })
+                    props.questionsLoad(a)
                     setState(true)
-                })
-            }
-        )
-    }})
+                }
+            )
+        }
+        else{
+            db.collection('questions').get().then(
+                (query)=>{
+                    let a=[]
+                    query.forEach((doc)=>{
+                        a=[doc.data(),...a]
+                    })
+                    console.log('a')
+                    props.questionsLoad(a)
+                    setState(true)
+                }
+            )
+        }
+    },[props.userStats.count])
     //db.collection('answerques').doc(this.props.uname).collection('qna').onSnapshot((snapshot)=>{snapshot.docs.forEach((doc)=>)});
 
     let h1;

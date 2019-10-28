@@ -61,7 +61,7 @@ class Homepage extends Component{
                 <Searchbar/>
                 <div>
                     <div>
-                        <QuesList />
+                        <QuesList {...this.props}/>
                     </div>
                     <div>
                         <ThemeProvider theme={{ background: '#f5f8fb',
