@@ -54,7 +54,7 @@ class Volunteer extends Component{
                     auth.createUserWithEmailAndPassword(this.state.email,this.state.pass).then(
                         (res)=>{
                             console.log(res)
-                            db.collection("answeredques").doc(`${this.state.uname}`).set({uid:res.user.uid,email:this.state.email,pass:this.state.pass,ans:"",active:false})}).then(
+                            db.collection("answeredques").doc(`${this.state.uname}`).set({uid:res.user.uid,email:this.state.email,pass:this.state.pass,ans:"",active:false,count:0})}).then(
                                 (res2)=>{
                                     console.log(res2);
                                     const user=firebase.auth().currentUser;

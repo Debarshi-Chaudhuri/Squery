@@ -56,8 +56,10 @@ const DialogActions = withStyles(theme => ({
 //msg.png
 
 export const Profile=(props)=>{
+
   //console.log(props)
-  const [open, setOpen] = React.useState(false);
+  const [openProfile, setOpenProfile] = React.useState(false);
+  const [openPost, setOpenPost] = React.useState(false);
   const [state, setState] = React.useState({
     right: false,
     image:props.userData.profilePic,
@@ -66,26 +68,25 @@ export const Profile=(props)=>{
   });
   const [file,setFile]=React.useState(null)
 
-  console.log(props.userData.profilePic);
-  const handleClickOpen = () => {
-    setOpen(true);
+  
+  const handleClickOpenProfile = () => {
+    setOpenProfile(true);
   };
-  const handleClose = (val) => {
+  const handleClickOpenPost = () => {
+    setOpenPost(true);
+  };
+
+  const handleCloseProfile = (val) => {
     
-    setOpen(false);
+    setOpenProfile(false);
     if(val){
       setTimeout(()=>setState({...state,image:state.prevImage}),500)
     }
   };
-  const handleclose = () => {
-    
-    setOpen(false);
-    
+  const handleClosePost = () => {
+    setOpenPost(false);
   };
 
-  const load=()=>{
-    console.log('AAAAAAAAAAA')
-  }
 
   const useStyles = makeStyles({
     avatar: {
@@ -110,13 +111,36 @@ export const Profile=(props)=>{
   };
 
   const classes = useStyles();
-  
-  const saveText=()=>
-  {
-    const db=props.firebase.firestore();
-    db.collection('answeredques').doc(`${props.firebase.auth().currentUser.displayName}`).collection('qna').add({question:state.text}).then((doc)=>{db.collection('answer').doc(doc.id).set({question:state.text,postedby:`${props.firebase.auth().currentUser.displayName}`})})
-    handleclose(false);
+
+
+  const textchange=(e)=>{
+    setState({...state,text:e.target.value})
   }
+  const saveText=()=>{
+    const db=props.firebase.firestore();
+    /*db.collection('answeredques').doc(`${props.firebase.auth().currentUser.displayName}`).collection('questions').add({question:state.text}).then(
+      (doc)=>{
+        db.collection('answer').doc(doc.id).set({question:state.text,postedby:`${props.firebase.auth().currentUser.displayName}`})
+      })*/
+    if(state.text!==''){
+      db.collection('answeredques').doc(`${props.uname}`).set({count:props.userStats.count+1},{merge:true}).then(
+        ()=>{
+          db.collection('answeredques').doc(`${props.uname}`).get().then(
+            (query)=>{
+              props.profileDataLoad(query.data());
+
+              db.collection('answeredques').doc(`${props.uname}`).collection('questions').doc(`${props.uname}ques${props.userStats.count}`).set({question:state.text})
+
+              db.collection('questions').doc(`${props.uname}ques${props.userStats.count}`).set({question:state.text,postedby:`${props.uname}`})           
+            }
+          )
+        }
+      )
+      handleClosePost();
+    }
+  }
+
+
   const tempStoreImg=(e)=>{
     const user=props.firebase.auth().currentUser;
     //console.log(user);
@@ -144,7 +168,7 @@ export const Profile=(props)=>{
     str.ref().child(`${user.displayName}`).put(file).then((snapshot)=>snapshot.ref.getDownloadURL().then((url)=>{
       db.collection("answeredques").doc(user.displayName).set({profilePic:url},{merge:true})
       setState({ ...state,image: url,prevImage:url })
-      handleClose(false);
+      handleCloseProfile(false);
    ;}));
   }
   const listClick = event =>{
@@ -152,14 +176,11 @@ export const Profile=(props)=>{
     if(event.target.id==='Logout')
     props.signOut()
     else if(event.target.id==='Change Profile Picture')
-    handleClickOpen();
+    handleClickOpenProfile();
     else if(event.target.id==='Add Post')
-      handleClickOpen();
+    handleClickOpenPost();
   }
-  const textchange=(e)=>
-  {
-    setState({text:e.target.value})
-  }
+  
   const sideList = side => (
     <div
       className={classes.list}
@@ -197,7 +218,7 @@ export const Profile=(props)=>{
       <Button variant='contained' style={{backgroundColor:'rgba(219, 230, 235, 0.966)',height:'33px',left:'1%'}} ><img src={icon} /></Button>
       <div style={{width:'40%',display:'inline-flex',alignItems:'center'}}>
         <Tooltip title="click to change or set profile picture" placement="bottom">
-          <Avatar alt="Profile-pic" imgProps={load} style={{cursor:'pointer',margin:'auto 5px auto auto'}} type="file" className={classes.bigAvatar} onClick={toggleDrawer('right', true)} src={`${state.image}`} />
+          <Avatar alt={`${props.uname.charAt(0)}`} style={{cursor:'pointer',margin:'auto 5px auto auto'}} type="file" className={classes.bigAvatar} onClick={toggleDrawer('right', true)} src={`${state.image}`} />
         </Tooltip>  
       </div>
       <SwipeableDrawer
@@ -208,8 +229,8 @@ export const Profile=(props)=>{
       >
         {sideList('right')}
       </SwipeableDrawer>
-      <Dialog onClose={()=>handleClose(true)} aria-labelledby="customized-dialog-title" open={open}>
-        <DialogTitle id="customized-dialog-title" onClose={()=>handleClose(true)}>
+      <Dialog onClose={()=>handleCloseProfile(true)} aria-labelledby="customized-dialog-title" open={openProfile}>
+        <DialogTitle id="customized-dialog-title" onClose={()=>handleCloseProfile(true)}>
           Change Avatar
         </DialogTitle>
         <DialogContent dividers>
@@ -224,13 +245,13 @@ export const Profile=(props)=>{
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog onClose={()=>handleClose(true)} aria-labelledby="customized-dialog-title" open={open}>
-        <DialogTitle id="customized-dialog-title" onClose={()=>handleClose(true)}>
+      <Dialog onClose={handleClosePost} aria-labelledby="customized-dialog-title" open={openPost}>
+        <DialogTitle id="customized-dialog-title" onClose={handleClosePost}>
           Ask Question 
         </DialogTitle>
         <DialogContent dividers>
-          <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'350px',width:'400px'}}>
-            <input placeholder="Write your question here .... " type="text" onChange={textchange}/>
+          <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'150px',width:'600px'}}>
+            <textarea placeholder="Write your question here .... " type="text" onChange={textchange} style={{height:'150px',width:'500px'}}/>
           </div>
         </DialogContent>
         <DialogActions>

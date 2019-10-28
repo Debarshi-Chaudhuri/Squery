@@ -1,22 +1,23 @@
 import React from "react";
 import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
-import { profileLoad } from "../actions/action.js";
+import { profileLoad,profileDataLoad,questionsLoad } from "../actions/action.js";
 import {Profile} from "../containers/Profile";
 import {Mes_Notif} from "../containers/Mes_Notif";
 import {QuesAns} from "../containers/QuesAns";
-import QuesList from "../containers/QuestionList";
+import {QuesList} from "../containers/QuestionList";
 import firebase from "../firebase";
 import ChatBot from "react-simple-chatbot";
 const mapDispatchToProps=(dispatch)=>{
   return bindActionCreators({
-    profileLoad
+    profileLoad,profileDataLoad,questionsLoad
   },dispatch)
 }
 const mapStateToProps=(store)=>{
   return({
       qna:store.qna,
-      userData:store.userData
+      userData:store.userData,
+      userStats:store.userStats
   })
 }
 class VolunteerPage extends React.Component{
@@ -26,10 +27,13 @@ class VolunteerPage extends React.Component{
   }
   componentDidMount(){
     this.props.profileLoad(this.props.location.state)
+    this.props.profileDataLoad(this.props.location.state)
     const db=firebase.firestore();
     firebase.auth().onAuthStateChanged((user)=> {
       //console.log(user)
+      
       if (user) {
+        db.collection('answeredques').doc(`${user.displayName}`).set({active:true},{merge:true})
         this.setState({loading:false,uname:user.displayName})
       }
       else {
@@ -44,6 +48,8 @@ class VolunteerPage extends React.Component{
   }
   
   signOut=()=>{
+    const db=firebase.firestore();
+    db.collection('answeredques').doc(`${firebase.auth().currentUser.displayName}`).set({active:false},{merge:true})
     this.props.history.push('/Volunteer');
     firebase.auth().signOut().then(function() {
       console.log("successfully signed out")
@@ -97,8 +103,8 @@ class VolunteerPage extends React.Component{
     else if(!this.state.resubmission)
     return(
         <div style={{zIndex:'1'}}>
-            <Profile firebase={firebase} signOut={this.signOut} {...this.props}/>
-            <QuesList {...this.state} firebase={firebase}/>
+            <Profile firebase={firebase} signOut={this.signOut} {...this.props} {...this.state}/>
+            <QuesList {...this.state} firebase={firebase} {...this.props}/>
             <ChatBot steps={steps} floating={true} floatingStyle={{backgroundColor:"rgba(0, 134, 196, 0.966)"}} />
         </div>
     );

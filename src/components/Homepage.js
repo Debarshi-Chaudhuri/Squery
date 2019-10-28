@@ -5,12 +5,12 @@ import { connect } from "react-redux";
 import { Searchbar } from "../containers/Searchbar";
 import { ThemeProvider } from 'styled-components';
 import firebase from '../firebase';
-import { homepageOnLoad } from "../actions/action";
-import QuesList  from "../containers/QuestionList";
+import { homepageOnLoad,questionsLoad } from "../actions/action";
+import {QuesList}  from "../containers/QuestionList";
 import { QuesAns } from "../containers/QuesAns";
 const mapDispatchToProps=(dispatch)=>{
     return bindActionCreators({
-        homepageOnLoad
+        homepageOnLoad,questionsLoad
     },dispatch)
 }
 const mapStateToProps=(store)=>{
