@@ -41,17 +41,14 @@ class VolunteerPage extends React.Component{
         this.setState({loading:false,resubmission:true})
       }
     });
-    //console.log(firebase.auth().currentUser.displayName);
-   // var jsondata=require("../qna.json");
-    //console.log(jsondata)
-    //db.collection('answeredques').doc('Pacharjee').onSnapshot((doc)=>{doc.data().collection('qna').get().then((d)=>{console.log(d)})})
   }
   
   signOut=()=>{
     const db=firebase.firestore();
-    db.collection('answeredques').doc(`${firebase.auth().currentUser.displayName}`).set({active:false},{merge:true})
+    
     this.props.history.push('/Volunteer');
     firebase.auth().signOut().then(function() {
+      db.collection('answeredques').doc(`${this.state.uname}`).set({active:false},{merge:true})
       console.log("successfully signed out")
     }).catch(function(error) {
       console.log("Error occured")

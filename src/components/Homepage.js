@@ -15,7 +15,8 @@ const mapDispatchToProps=(dispatch)=>{
 }
 const mapStateToProps=(store)=>{
     return({
-        qna:store.qna
+        qna:store.qna,
+        userStats:store.userStats
     })
 }
 class Homepage extends Component{
