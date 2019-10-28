@@ -4,7 +4,7 @@ import {Card, CardActions,CardActionArea,CardContent,CardHeader,CardMedia ,Typog
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';
-import "../qna.json";
+//import "../qna.json";
 const useStyles = makeStyles(theme => ({
     card: {
       maxWidth: 345,
@@ -37,9 +37,9 @@ export const QuesItem=(props)=>
     <br/>
         <Card style={{borderRadius:"10px",shadowColor: '#000000',backgroundColor:"#e6ffff"}}>
         <CardContent>
-        <span>Posted by: {props.items.postby}</span>
+        <span>Posted by: {props.uname}</span>
         <div>
-        <Typography>Question: {props.items.ques}</Typography><br/>
+        <Typography>Question: {props.items.question}</Typography><br/>
         <Typography>{props.items.replyby} replied: {props.items.ans}</Typography></div>
         </CardContent>
         <CardActions disableSpacing>

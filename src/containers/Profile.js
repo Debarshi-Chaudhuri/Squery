@@ -62,6 +62,7 @@ export const Profile=(props)=>{
     right: false,
     image:props.userData.profilePic,
     prevImage:props.userData.profilePic,
+    text:""
   });
   const [file,setFile]=React.useState(null)
 
@@ -75,6 +76,11 @@ export const Profile=(props)=>{
     if(val){
       setTimeout(()=>setState({...state,image:state.prevImage}),500)
     }
+  };
+  const handleclose = () => {
+    
+    setOpen(false);
+    
   };
 
   const load=()=>{
@@ -105,7 +111,12 @@ export const Profile=(props)=>{
 
   const classes = useStyles();
   
-
+  const saveText=()=>
+  {
+    const db=props.firebase.firestore();
+    db.collection('answeredques').doc(`${props.firebase.auth().currentUser.displayName}`).collection('qna').add({question:state.text}).then((doc)=>{db.collection('answer').doc(doc.id).set({question:state.text,postedby:`${props.firebase.auth().currentUser.displayName}`})})
+    handleclose(false);
+  }
   const tempStoreImg=(e)=>{
     const user=props.firebase.auth().currentUser;
     //console.log(user);
@@ -142,6 +153,12 @@ export const Profile=(props)=>{
     props.signOut()
     else if(event.target.id==='Change Profile Picture')
     handleClickOpen();
+    else if(event.target.id==='Add Post')
+      handleClickOpen();
+  }
+  const textchange=(e)=>
+  {
+    setState({text:e.target.value})
   }
   const sideList = side => (
     <div
@@ -204,6 +221,21 @@ export const Profile=(props)=>{
           <input type='file' onChange={tempStoreImg}/>
           <Button onClick={storeImg} color="primary">
             Save changes
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog onClose={()=>handleClose(true)} aria-labelledby="customized-dialog-title" open={open}>
+        <DialogTitle id="customized-dialog-title" onClose={()=>handleClose(true)}>
+          Ask Question 
+        </DialogTitle>
+        <DialogContent dividers>
+          <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'350px',width:'400px'}}>
+            <input placeholder="Write your question here .... " type="text" onChange={textchange}/>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={saveText} color="primary">
+            Post
           </Button>
         </DialogActions>
       </Dialog>
