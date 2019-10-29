@@ -131,7 +131,7 @@ export const Profile=(props)=>{
 
               db.collection('answeredques').doc(`${props.uname}`).collection('questions').doc(`${props.uname}ques${props.userStats.count}`).set({question:state.text})
 
-              db.collection('questions').doc(`${props.uname}ques${props.userStats.count}`).set({question:state.text,postedby:`${props.uname}`})           
+              db.collection('questions').add({question:state.text,postedBy:`${props.uname}`,id:`${props.uname}ques${props.userStats.count}`})           
             }
           )
         }
@@ -218,7 +218,7 @@ export const Profile=(props)=>{
       <Button variant='contained' style={{backgroundColor:'rgba(219, 230, 235, 0.966)',height:'33px',left:'1%'}} ><img src={icon} /></Button>
       <div style={{width:'40%',display:'inline-flex',alignItems:'center'}}>
         <Tooltip title="click to change or set profile picture" placement="bottom">
-          <Avatar alt={`${props.uname.charAt(0)}`} style={{cursor:'pointer',margin:'auto 5px auto auto'}} type="file" className={classes.bigAvatar} onClick={toggleDrawer('right', true)} src={`${state.image}`} />
+          <Avatar alt={`${props.uname.charAt(0)}`} style={{cursor:'pointer',margin:'auto 5px auto auto',backgroundColor:'white'}} type="file" className={classes.bigAvatar} onClick={toggleDrawer('right', true)} src={`${state.image}`} />
         </Tooltip>  
       </div>
       <SwipeableDrawer

@@ -9,7 +9,6 @@ class Volunteer extends Component{
         this.state={a:'blanket3',info:true,b:'Volunteer3',opacity:'1',uname:"",pass:"",email:"",popup:false,loading:false}
     }
     componentDidMount(){
-        console.log(this.props.user)
         firebase.auth().signOut().then(function() {
             console.log("successfully signed out")
           }).catch(function(error) {

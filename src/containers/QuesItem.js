@@ -33,11 +33,17 @@ export const QuesItem=(props)=>
     const handleExpandClick = () => {
       setExpanded(!expanded);
     };
+    let name='';
+    if(props.uname===undefined)
+    name=props.items.postedBy
+    else
+    name=props.uname
+
     return(<div>
     <br/>
         <Card style={{borderRadius:"10px",shadowColor: '#000000',backgroundColor:"#e6ffff"}}>
         <CardContent>
-        <span>Posted by: {props.uname}</span>
+        <span>Posted by: {name}</span>
         <div>
         <Typography>Question: {props.items.question}</Typography><br/>
         <Typography>{props.items.replyby} replied: {props.items.ans}</Typography></div>

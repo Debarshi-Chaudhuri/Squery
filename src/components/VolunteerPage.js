@@ -26,12 +26,16 @@ class VolunteerPage extends React.Component{
     this.state={resubmission:false,loading:true,uname:''}
   }
   componentDidMount(){
-    this.props.profileLoad(this.props.location.state)
-    this.props.profileDataLoad(this.props.location.state)
+    console.log(this.props.location.state)
+    if(this.props.location.state!==undefined){
+      this.props.profileLoad(this.props.location.state)
+      this.props.profileDataLoad(this.props.location.state)
+    }
+    else
+    this.setState({resubmission:true})
     const db=firebase.firestore();
     firebase.auth().onAuthStateChanged((user)=> {
-      //console.log(user)
-      
+      console.log(user)
       if (user) {
         db.collection('answeredques').doc(`${user.displayName}`).set({active:true},{merge:true})
         this.setState({loading:false,uname:user.displayName})
@@ -47,12 +51,12 @@ class VolunteerPage extends React.Component{
     const db=firebase.firestore();
     
     this.props.history.push('/Volunteer');
-    firebase.auth().signOut().then(function() {
+    /*firebase.auth().signOut().then(function() {
       db.collection('answeredques').doc(`${this.state.uname}`).set({active:false},{merge:true})
       console.log("successfully signed out")
     }).catch(function(error) {
       console.log("Error occured")
-    });
+    });*/
   }
   render(){
     const steps=[
