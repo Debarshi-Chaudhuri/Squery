@@ -1,6 +1,6 @@
 import React from 'react';
 //import { NavLink } from "react-router-dom";
-import {Card, CardActions,CardActionArea,CardContent,CardHeader,CardMedia ,Typography,IconButton,Collapse,makeStyles ,Button} from "@material-ui/core";
+import {Card, CardActions,CardActionArea,CardContent,CardHeader,CardMedia ,Typography,IconButton,Collapse,makeStyles ,Button,TextareaAutosize} from "@material-ui/core";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';
@@ -24,7 +24,18 @@ const useStyles = makeStyles(theme => ({
       transform: 'rotate(180deg)',
     },
     
-  }));
+  })
+);
+
+const styles={
+  textarea:{
+    borderRadius:'2px',
+    width:"85%",
+    fontSize:"14px",
+    marginLeft:'2%',
+    outline:'none'
+  }
+}
 export const QuesItem=(props)=>
 {
     const classes = useStyles();
@@ -41,30 +52,29 @@ export const QuesItem=(props)=>
 
     return(<div>
     <br/>
-        <Card style={{borderRadius:"10px",shadowColor: '#000000',backgroundColor:"#e6ffff"}}>
-        <CardContent>
-        <span>Posted by: {name}</span>
-        <div>
-        <Typography>Question: {props.items.question}</Typography><br/>
-        <Typography>{props.items.replyby} replied: {props.items.ans}</Typography></div>
-        </CardContent>
+        <Card style={{borderRadius:"10px",shadowColor: '#000000',backgroundColor:"#e4f5ef"}}>
+          <CardContent>
+            <span style={{fontSize:'13px',fontWeight:'lighter'}}>Posted by: {name}</span>
+            <Typography><b> {props.items.question}</b></Typography><br/>
+            <Typography>{props.items.replyby} {props.items.ans}</Typography>
+          </CardContent>
         <CardActions disableSpacing>
-        <IconButton><FavoriteIcon/></IconButton>
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
+          <IconButton><FavoriteIcon/></IconButton>
+          <IconButton
+            className={clsx(classes.expand, {
+              [classes.expandOpen]: expanded,
+            })}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
+          >
           <ExpandMoreIcon />
         </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <input placeholder="Write your answer here" style={{borderRadius:"15px",height:"30px",width:"85%",fontSize:"14px"}}/>
-          <Button variant='contained' style={{backgroundColor:'rgba(219, 230, 235, 0.966)',height:'31px',left:'1%'}} >Post</Button>
+          <TextareaAutosize rows={10} rowsMax={10} placeholder="Write your answer here" style={styles.textarea}/><br></br>
+          <Button   style={{backgroundColor:'white',marginLeft:'2%',textAlign:'center',height:'30px',width:'50px',display:'flex',justifyContent:'center',fontSize:'12px',backgroundColor:'rgba(0, 134, 196, 0.966)',color:'white'}} >Submit</Button>
         </CardContent>
       </Collapse>
         </Card>

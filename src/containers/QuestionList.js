@@ -53,7 +53,7 @@ export const QuesList =(props)=>{
      
     return(
         <div style={{width:'80%',marginLeft:'2%',padding:'55px',zIndex:'2'}}>
-        <h1>{h1}</h1>
+        <h1 style={{fontWeight:'300'}}>{h1}</h1>
             <div>{
             bool ? props.qna.map((items)=><QuesItem items={items} uname={props.uname}/>) : <div style={{display:'flex',width:'100%',height:'600px',alignItems:'center',justifyContent:'center'}}>
             <img src={require('../Images/loader2.gif')} style={{width:'70px',height:'70px'}}/>

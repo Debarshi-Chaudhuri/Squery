@@ -1,6 +1,6 @@
 import React from 'react';
 import icon from '../icon.svg'
-import { Button,Avatar ,makeStyles,Tooltip,SwipeableDrawer,List,ListItemText,ListItem,Divider} from "@material-ui/core";
+import { Button,Avatar ,makeStyles,Tooltip,SwipeableDrawer,List,ListItemText,ListItem,Divider,TextareaAutosize} from "@material-ui/core";
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
@@ -196,7 +196,7 @@ export const Profile=(props)=>{
       </List>  
       <List>
         {['Change Profile Picture', 'Messages', 'Add Post', 'Logout'].map((text, index) => (
-          <ListItem button key={text} id={`${text}`} style={{height:'50px'}} onClick={listClick}>
+          <ListItem button key={text} id={`${text}`} style={{height:'40px',fontSize:'15px',fontWeight:'400'}} onClick={listClick}>
             {text}
           </ListItem>
         ))}
@@ -204,7 +204,7 @@ export const Profile=(props)=>{
       <Divider />
       <List>
         {[ 'Settings', 'About'].map((text, index) => (
-          <ListItem button key={text} style={{height:'50px'}} id={`${text}`} onClick={listClick}>
+          <ListItem button key={text} style={{height:'40px',fontSize:'15px',fontWeight:'400'}} id={`${text}`} onClick={listClick}>
             {text}
           </ListItem>
         ))}
@@ -213,9 +213,9 @@ export const Profile=(props)=>{
   );
   return(
     <div className='Searchbar-header'>
-      <p style={{color:'white',fontSize:'120%',marginLeft:'2%'}}>Squery</p>
+      <p style={{color:'black',fontSize:'120%',marginLeft:'2%',fontWeight:'350'}}>Squery</p>
       <input type='text' className='Searchbar-search' placeholder='What&apos;s your question? ' />
-      <Button variant='contained' style={{backgroundColor:'rgba(219, 230, 235, 0.966)',height:'33px',left:'1%'}} ><img src={icon} /></Button>
+      <Button variant='contained' style={{backgroundColor:'rgba(219, 230, 235, 0.966)',height:'31px',left:'1%'}} ><img style={{height:'20px'}} src={icon} /></Button>
       <div style={{width:'40%',display:'inline-flex',alignItems:'center'}}>
         <Tooltip title="click to change or set profile picture" placement="bottom">
           <Avatar alt={`${props.uname.charAt(0)}`} style={{cursor:'pointer',margin:'auto 5px auto auto',backgroundColor:'white'}} type="file" className={classes.bigAvatar} onClick={toggleDrawer('right', true)} src={`${state.image}`} />
@@ -251,7 +251,7 @@ export const Profile=(props)=>{
         </DialogTitle>
         <DialogContent dividers>
           <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'150px',width:'600px'}}>
-            <textarea placeholder="Write your question here .... " type="text" onChange={textchange} style={{height:'150px',width:'500px'}}/>
+            <TextareaAutosize rows={10} rowsMax={10} placeholder="Write your question here..." style={{width:'500px',outline:'none',borderRadius:'2px'}}/>
           </div>
         </DialogContent>
         <DialogActions>

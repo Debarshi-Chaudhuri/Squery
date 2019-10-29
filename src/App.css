@@ -5,6 +5,7 @@
   z-index: 3;
   position: fixed;
   align-items: center;
+  background-image: url('./Images/background2.jpg')
 }
 .Profile-header{
   flex-direction: column;
@@ -38,6 +39,7 @@
   border-radius: 5px;
   border-width: 1px;
   text-indent: 6px;
+  outline: none;
 }
 .Searchbar-login{
   color: white;
