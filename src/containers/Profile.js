@@ -129,9 +129,11 @@ export const Profile=(props)=>{
             (query)=>{
               props.profileDataLoad(query.data());
 
-              db.collection('answeredques').doc(`${props.uname}`).collection('questions').doc(`${props.uname}ques${props.userStats.count}`).set({question:state.text})
+              db.collection('answeredques').doc(`${props.uname}`).collection('questions').doc(`${props.uname}ques${props.userStats.count}`).set({question:state.text,id:`${props.uname}ques${props.userStats.count}`,answered:false})
 
-              db.collection('questions').add({question:state.text,postedBy:`${props.uname}`,id:`${props.uname}ques${props.userStats.count}`})           
+              db.collection('questions').add({question:state.text,postedBy:`${props.uname}`,id:`${props.uname}ques${props.userStats.count}`,answered:false})     
+              
+              props.dataUpdate();
             }
           )
         }
@@ -251,7 +253,7 @@ export const Profile=(props)=>{
         </DialogTitle>
         <DialogContent dividers>
           <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'150px',width:'600px'}}>
-            <TextareaAutosize rows={10} rowsMax={10} placeholder="Write your question here..." style={{width:'500px',outline:'none',borderRadius:'2px'}}/>
+            <TextareaAutosize rows={10} rowsMax={10} placeholder="Write your question here..." style={{width:'500px',outline:'none',borderRadius:'2px'}} onChange={textchange}/>
           </div>
         </DialogContent>
         <DialogActions>

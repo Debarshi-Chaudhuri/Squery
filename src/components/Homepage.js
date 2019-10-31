@@ -62,7 +62,7 @@ class Homepage extends Component{
                 <Searchbar/>
                 <div>
                     <div>
-                        <QuesList {...this.props}/>
+                        <QuesList {...this.props} firebase={firebase}/>
                     </div>
                     <div>
                         <ThemeProvider theme={{ background: '#f5f8fb',

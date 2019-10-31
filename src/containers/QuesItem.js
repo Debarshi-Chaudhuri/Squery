@@ -38,12 +38,61 @@ const styles={
 }
 export const QuesItem=(props)=>
 {
+    console.log(props)
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
-  
+    const [text,setText]=React.useState('');
     const handleExpandClick = () => {
       setExpanded(!expanded);
     };
+    const [ans,setAns]=React.useState([]);
+    React.useEffect(()=>{
+      const db=props.firebase.firestore();
+      db.collection('answers').doc(`${props.items.id}`).collection('data').get().then(
+        (query)=>{
+          let a=[]
+          query.forEach(
+            (doc)=>{
+              a=[...a,doc.data()]
+            }
+          )
+          setAns(a)
+          console.log(ans)
+        }
+      )
+    },[props.updateCount])
+    const postAnswer=()=>{
+      //console.log(text)
+      if(text!==''){
+        let x=text;
+        let questionId;
+        const db=props.firebase.firestore();
+        db.collection('answers').doc(`${props.items.id}`).collection('data').add({answer:x,upvote:0,answeredBy:props.uname})
+
+        db.collection('answeredques').doc(`${name}`).collection('questions').doc(`${props.items.id}`).set({answered:true},{merge:true})
+
+        db.collection('questions').get().then(
+          (query)=>{
+            query.forEach(
+              (doc)=>{
+               
+                if(doc.data().id===props.items.id)
+                questionId=doc.id;
+              }
+            )
+            db.collection('questions').doc(`${questionId}`).set({answered:true},{merge:true})
+            props.dataUpdate();
+          }
+        )
+        
+        setText('')
+      }
+      else
+      alert('Write something')
+    }
+    const writeAnswer=(event)=>{
+      setText(event.target.value)
+    }
     let name='';
     if(props.uname===undefined)
     name=props.items.postedBy
@@ -56,7 +105,11 @@ export const QuesItem=(props)=>
           <CardContent>
             <span style={{fontSize:'13px',fontWeight:'lighter'}}>Posted by: {name}</span>
             <Typography><b> {props.items.question}</b></Typography><br/>
-            <Typography>{props.items.replyby} {props.items.ans}</Typography>
+            
+            { ans.map((data)=>{
+                  return(<div><Typography style={{fontSize:'15px',fontWeight:'400'}}>{data.answer}</Typography><br/></div>)
+              })
+            }
           </CardContent>
         <CardActions disableSpacing>
           <IconButton><FavoriteIcon/></IconButton>
@@ -73,8 +126,8 @@ export const QuesItem=(props)=>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <TextareaAutosize rows={10} rowsMax={10} placeholder="Write your answer here" style={styles.textarea}/><br></br>
-          <Button   style={{backgroundColor:'white',marginLeft:'2%',textAlign:'center',height:'30px',width:'50px',display:'flex',justifyContent:'center',fontSize:'12px',backgroundColor:'rgba(0, 134, 196, 0.966)',color:'white'}} >Submit</Button>
+          <TextareaAutosize rows={10} rowsMax={10} placeholder="Write your answer here" style={styles.textarea} onChange={writeAnswer} value={text}/><br></br>
+          <Button   style={{backgroundColor:'white',marginLeft:'2%',textAlign:'center',height:'30px',width:'50px',display:'flex',justifyContent:'center',fontSize:'12px',backgroundColor:'rgba(0, 134, 196, 0.966)',color:'white'}} onClick={postAnswer} >Submit</Button>
         </CardContent>
       </Collapse>
         </Card>

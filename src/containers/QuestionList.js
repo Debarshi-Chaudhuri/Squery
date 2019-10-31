@@ -6,7 +6,7 @@ export const QuesList =(props)=>{
     const [bool,setState]=React.useState(false)
     const db=firebase.firestore();
     React.useEffect(()=>{
-        console.log(props)
+        //console.log(props)
         if(props.uname!==undefined){
             //db.collection('answeredques').doc(this.props.uname).collection('qna').onSnapshot((snapshot)=>snapshot.docs.forEach((doc)=>console.log(doc.data())))
             db.collection('answeredques').doc(props.uname).collection('questions').get().then(
@@ -33,7 +33,7 @@ export const QuesList =(props)=>{
                 }
             )
         }
-    },[props.userStats.count])
+    },[props.updateCount])
     //db.collection('answerques').doc(this.props.uname).collection('qna').onSnapshot((snapshot)=>{snapshot.docs.forEach((doc)=>)});
 
     let h1;
@@ -55,7 +55,7 @@ export const QuesList =(props)=>{
         <div style={{width:'80%',marginLeft:'2%',padding:'55px',zIndex:'2'}}>
         <h1 style={{fontWeight:'300'}}>{h1}</h1>
             <div>{
-            bool ? props.qna.map((items)=><QuesItem items={items} uname={props.uname}/>) : <div style={{display:'flex',width:'100%',height:'600px',alignItems:'center',justifyContent:'center'}}>
+            bool ? props.qna.map((items)=><QuesItem items={items} uname={props.uname} {...props}/>) : <div style={{display:'flex',width:'100%',height:'600px',alignItems:'center',justifyContent:'center'}}>
             <img src={require('../Images/loader2.gif')} style={{width:'70px',height:'70px'}}/>
             </div>
             }</div>

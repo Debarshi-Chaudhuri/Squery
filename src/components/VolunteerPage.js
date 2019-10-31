@@ -1,7 +1,7 @@
 import React from "react";
 import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
-import { profileLoad,profileDataLoad,questionsLoad } from "../actions/action.js";
+import { profileLoad,profileDataLoad,questionsLoad,dataUpdate } from "../actions/action.js";
 import {Profile} from "../containers/Profile";
 import {Mes_Notif} from "../containers/Mes_Notif";
 import {QuesAns} from "../containers/QuesAns";
@@ -10,14 +10,15 @@ import firebase from "../firebase";
 import ChatBot from "react-simple-chatbot";
 const mapDispatchToProps=(dispatch)=>{
   return bindActionCreators({
-    profileLoad,profileDataLoad,questionsLoad
+    profileLoad,profileDataLoad,questionsLoad,dataUpdate
   },dispatch)
 }
 const mapStateToProps=(store)=>{
   return({
       qna:store.qna,
       userData:store.userData,
-      userStats:store.userStats
+      userStats:store.userStats,
+      updateCount:store.updateCount
   })
 }
 class VolunteerPage extends React.Component{
