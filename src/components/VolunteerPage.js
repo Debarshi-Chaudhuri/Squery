@@ -31,8 +31,6 @@ class VolunteerPage extends React.Component{
     console.log(this.props.location.state)
     const db=firebase.firestore();
 
-    if(this.props.location.state==undefined)
-    this.setState({resubmission:true})
 
 
     

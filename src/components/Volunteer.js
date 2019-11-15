@@ -111,14 +111,8 @@ class Volunteer extends Component{
                     (res)=>{
                         
                         if(auth.currentUser.emailVerified){
-                            db.collection("answeredques").doc(`${this.state.uname}`).get().then(
-                                (query)=>{
-                                  console.log(query.data())
-                                  //this.props.profileLoad(query.data())
-                                  this.props.history.push(`/Volunteer/${this.state.uname}`,query.data())
-                                  this.setState({uname:"",pass:"",loading:false})
-                                }
-                              )
+                            this.props.history.push(`/Volunteer/${this.state.uname}`)
+                            this.setState({uname:"",pass:"",loading:false})
                             
                         }
                         else{
