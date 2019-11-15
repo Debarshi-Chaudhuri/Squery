@@ -46,6 +46,8 @@ class VolunteerPage extends React.Component{
         this.setState({loading:false,resubmission:true})
       }
     });
+    
+    (db.collection(`answeredques/Pacharjee/questions`). get().then((d)=>{d.forEach((doc)=>console.log(firebase.firestore.Timestamp.now().toDate()))}));
   }
   
   signOut=()=>{

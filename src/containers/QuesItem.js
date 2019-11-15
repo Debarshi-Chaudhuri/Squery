@@ -1,8 +1,10 @@
 import React from 'react';
 //import { NavLink } from "react-router-dom";
-import {Card, CardActions,CardActionArea,CardContent,CardHeader,CardMedia ,Typography,IconButton,Collapse,makeStyles ,Button,TextareaAutosize} from "@material-ui/core";
+import {Card, CardActions,CardActionArea,CardContent,CardHeader,CardMedia ,Typography,IconButton,Collapse,makeStyles,Badge ,Button,TextareaAutosize} from "@material-ui/core";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
+import ThumbDownOutlinedIcon from '@material-ui/icons/ThumbDownOutlined';
 import clsx from 'clsx';
 //import "../qna.json";
 const useStyles = makeStyles(theme => ({
@@ -38,7 +40,7 @@ const styles={
 }
 export const QuesItem=(props)=>
 {
-    console.log(props)
+    //console.log(props)
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
     const [text,setText]=React.useState('');
@@ -53,11 +55,11 @@ export const QuesItem=(props)=>
           let a=[]
           query.forEach(
             (doc)=>{
-              a=[...a,doc.data()]
+              a=[...a,doc]
             }
           )
           setAns(a)
-          console.log(ans)
+          //console.log(ans)
         }
       )
     },[props.updateCount])
@@ -72,7 +74,7 @@ export const QuesItem=(props)=>
         db.collection('answeredques').doc(`${name}`).collection('questions').doc(`${props.items.id}`).set({answered:true},{merge:true})
 
         db.collection('questions').get().then(
-          (query)=>{
+          (query)=>{                                                
             query.forEach(
               (doc)=>{
                
@@ -80,6 +82,7 @@ export const QuesItem=(props)=>
                 questionId=doc.id;
               }
             )
+            console.log(questionId)
             db.collection('questions').doc(`${questionId}`).set({answered:true},{merge:true})
             props.dataUpdate();
           }
@@ -98,21 +101,31 @@ export const QuesItem=(props)=>
     name=props.items.postedBy
     else
     name=props.uname
-
+    const db=props.firebase.firestore();
+    const upvote=(d,l)=>
+    {
+      db.collection('answers').doc(`${props.items.id}`).collection('data').doc(`${d}`).set({upvote:l+1})
+      console.log(d);
+      console.log(l);
+    }
+    const downvote=(d,l)=>
+    {
+      db.collection('answers').doc(`${props.items.id}`).collection('data').doc(`${d}`).set({downvote:l+1})
+    }
     return(<div>
     <br/>
         <Card style={{borderRadius:"10px",shadowColor: '#000000',backgroundColor:"#e4f5ef"}}>
           <CardContent>
             <span style={{fontSize:'13px',fontWeight:'lighter'}}>Posted by: {name}</span>
-            <Typography><b> {props.items.question}</b></Typography><br/>
+            <Typography><b> {props.items.question}</b></Typography><br/><hr/>
             
             { ans.map((data)=>{
-                  return(<div><Typography style={{fontSize:'15px',fontWeight:'400'}}>{data.answer}</Typography><br/></div>)
+                  return(<div><Typography style={{fontSize:'15px',fontWeight:'400'}}><span style={{fontSize:"15px"}}><b>{data.data().answeredBy}</b></span> repled:   {data.data().answer}</Typography><br/>
+                 <hr/></div>)
               })
             }
           </CardContent>
         <CardActions disableSpacing>
-          <IconButton><FavoriteIcon/></IconButton>
           <IconButton
             className={clsx(classes.expand, {
               [classes.expandOpen]: expanded,

@@ -116,6 +116,8 @@ export const Profile=(props)=>{
   const textchange=(e)=>{
     setState({...state,text:e.target.value})
   }
+  console.log(props.userStats.count)
+  
   const saveText=()=>{
     const db=props.firebase.firestore();
     /*db.collection('answeredques').doc(`${props.firebase.auth().currentUser.displayName}`).collection('questions').add({question:state.text}).then(
@@ -124,16 +126,15 @@ export const Profile=(props)=>{
       })*/
     if(state.text!==''){
       db.collection('answeredques').doc(`${props.uname}`).set({count:props.userStats.count+1},{merge:true}).then(
-        ()=>{
+        (d)=>{
+          console.log(d);
+          console.log(props.userStats.count)
           db.collection('answeredques').doc(`${props.uname}`).get().then(
             (query)=>{
               props.profileDataLoad(query.data());
-
-              db.collection('answeredques').doc(`${props.uname}`).collection('questions').doc(`${props.uname}ques${props.userStats.count}`).set({question:state.text,id:`${props.uname}ques${props.userStats.count}`,answered:false})
-
-              db.collection('questions').add({question:state.text,postedBy:`${props.uname}`,id:`${props.uname}ques${props.userStats.count}`,answered:false})     
-              
               props.dataUpdate();
+              db.collection('answeredques').doc(`${props.uname}`).collection('questions').doc(`${props.uname}ques${props.userStats.count}`).set({question:state.text,id:`${props.uname}ques${props.userStats.count}`,answered:false,time:props.firebase.firestore.Timestamp.now().toDate()},()=>{db.collection('questions').add({question:state.text,postedBy:`${props.uname}`,id:`${props.uname}ques${props.userStats.count}`,answered:false,time:props.firebase.firestore.Timestamp.now().toDate()})})
+              
             }
           )
         }

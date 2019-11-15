@@ -9,7 +9,7 @@ export const QuesList =(props)=>{
         //console.log(props)
         if(props.uname!==undefined){
             //db.collection('answeredques').doc(this.props.uname).collection('qna').onSnapshot((snapshot)=>snapshot.docs.forEach((doc)=>console.log(doc.data())))
-            db.collection('answeredques').doc(props.uname).collection('questions').get().then(
+            db.collection('answeredques').doc(props.uname).collection('questions').orderBy('time').get().then(
                 (query)=>{
                     let a=[]
                     query.forEach((doc)=>{
@@ -21,7 +21,7 @@ export const QuesList =(props)=>{
             )
         }
         else{
-            db.collection('questions').get().then(
+            db.collection('questions').orderBy('time').get().then(
                 (query)=>{
                     let a=[]
                     query.forEach((doc)=>{
