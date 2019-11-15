@@ -16,6 +16,7 @@ export const QuesList =(props)=>{
                         a=[doc.data(),...a]
                     })
                     props.questionsLoad(a)
+                    props.answerUpdate()
                     setState(true)
                 }
             )
@@ -29,11 +30,12 @@ export const QuesList =(props)=>{
                     })
                     console.log('a')
                     props.questionsLoad(a)
+                    
                     setState(true)
                 }
             )
         }
-    },[props.updateCount])
+    },[props.updateQuestion])
     //db.collection('answerques').doc(this.props.uname).collection('qna').onSnapshot((snapshot)=>{snapshot.docs.forEach((doc)=>)});
 
     let h1;

@@ -62,7 +62,7 @@ export const QuesItem=(props)=>
           //console.log(ans)
         }
       )
-    },[props.updateCount])
+    },[props.updateAnswer])
     const postAnswer=()=>{
       //console.log(text)
       if(text!==''){
@@ -84,7 +84,7 @@ export const QuesItem=(props)=>
             )
             console.log(questionId)
             db.collection('questions').doc(`${questionId}`).set({answered:true},{merge:true})
-            props.dataUpdate();
+            props.answerUpdate();
           }
         )
         

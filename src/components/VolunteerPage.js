@@ -1,7 +1,7 @@
 import React from "react";
 import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
-import { profileLoad,profileDataLoad,questionsLoad,dataUpdate } from "../actions/action.js";
+import { profileLoad,profileDataLoad,questionsLoad,questionUpdate,answerUpdate } from "../actions/action.js";
 import {Profile} from "../containers/Profile";
 import {Mes_Notif} from "../containers/Mes_Notif";
 import {QuesAns} from "../containers/QuesAns";
@@ -10,7 +10,7 @@ import firebase from "../firebase";
 import ChatBot from "react-simple-chatbot";
 const mapDispatchToProps=(dispatch)=>{
   return bindActionCreators({
-    profileLoad,profileDataLoad,questionsLoad,dataUpdate
+    profileLoad,profileDataLoad,questionsLoad,questionUpdate,answerUpdate
   },dispatch)
 }
 const mapStateToProps=(store)=>{
@@ -18,7 +18,8 @@ const mapStateToProps=(store)=>{
       qna:store.qna,
       userData:store.userData,
       userStats:store.userStats,
-      updateCount:store.updateCount
+      updateQuestion:store.updateQuestion,
+      updateAnswer:store.updateAnswer
   })
 }
 class VolunteerPage extends React.Component{
@@ -28,18 +29,27 @@ class VolunteerPage extends React.Component{
   }
   componentDidMount(){
     console.log(this.props.location.state)
-    if(this.props.location.state!==undefined){
-      this.props.profileLoad(this.props.location.state)
-      this.props.profileDataLoad(this.props.location.state)
-    }
-    else
-    this.setState({resubmission:true})
     const db=firebase.firestore();
+
+    if(this.props.location.state==undefined)
+    this.setState({resubmission:true})
+
+
+    
     firebase.auth().onAuthStateChanged((user)=> {
       console.log(user)
       if (user) {
         db.collection('answeredques').doc(`${user.displayName}`).set({active:true},{merge:true})
-        this.setState({loading:false,uname:user.displayName})
+        db.collection("answeredques").doc(`${user.displayName}`).get().then(
+          (query)=>{
+            console.log(query.data())
+            this.props.profileLoad(query.data())
+            this.props.profileDataLoad(query.data())
+            this.setState({loading:false,uname:user.displayName})
+          }
+          
+        )
+        
       }
       else {
         console.log("user signed out");

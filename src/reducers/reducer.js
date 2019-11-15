@@ -3,7 +3,8 @@ const initialState={
     loggedIn:false,
     userData:{},
     userStats:{},
-    updateCount:0
+    updateQuestion:0,
+    updateAnswer:0
 }
 export const reducer=(state=initialState,action)=>{
     switch(action.type){
@@ -31,9 +32,13 @@ export const reducer=(state=initialState,action)=>{
         return{
             ...state,qna:action.payload
         }
-        case 'DATA_UPDATE':
+        case 'QUESTION_UPDATE':
         return{
-            ...state,updateCount:state.updateCount+1
+            ...state,updateQuestion:state.updateQuestion+1
+        }
+        case 'ANSWER_UPDATE':
+        return{
+            ...state,updateAnswer:state.updateAnswer+1
         }
         default:
             return state;

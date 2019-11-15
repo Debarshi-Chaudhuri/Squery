@@ -132,16 +132,25 @@ export const Profile=(props)=>{
           db.collection('answeredques').doc(`${props.uname}`).get().then(
             (query)=>{
               props.profileDataLoad(query.data());
-              props.dataUpdate();
-              db.collection('answeredques').doc(`${props.uname}`).collection('questions').doc(`${props.uname}ques${props.userStats.count}`).set({question:state.text,id:`${props.uname}ques${props.userStats.count}`,answered:false,time:props.firebase.firestore.Timestamp.now().toDate()},()=>{db.collection('questions').add({question:state.text,postedBy:`${props.uname}`,id:`${props.uname}ques${props.userStats.count}`,answered:false,time:props.firebase.firestore.Timestamp.now().toDate()})})
+              
+              
+              
+              db.collection('answeredques').doc(`${props.uname}`).collection('questions').doc(`${props.uname}ques${props.userStats.count}`).set({question:state.text,id:`${props.uname}ques${props.userStats.count}`,answered:false,time:props.firebase.firestore.Timestamp.now().toDate()}).then(
+                ()=>{
+                  props.questionUpdate();
+                }
+              )
+              
+              
+              db.collection('questions').add({question:state.text,postedBy:`${props.uname}`,id:`${props.uname}ques${props.userStats.count}`,answered:false,time:props.firebase.firestore.Timestamp.now().toDate()})})
               
             }
           )
         }
-      )
+      
       handleClosePost();
-    }
   }
+  
 
 
   const tempStoreImg=(e)=>{

@@ -38,14 +38,13 @@ export const questionsLoad=(data)=>{
         payload:data
     })
 }
-export const dataUpdate=()=>{
+export const questionUpdate=()=>{
     return({
-        type:'DATA_UPDATE'
+        type:'QUESTION_UPDATE'
     })
 }
-export const answersLoad=(data)=>{
+export const answerUpdate=()=>{
     return({
-        type:'QUESTIONS_LOAD',
-        payload:data
+        type:'ANSWER_UPDATE'
     })
 }
