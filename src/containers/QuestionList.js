@@ -2,11 +2,12 @@ import React from 'react';
 import {QuesItem} from "./QuesItem";
 import firebase from "../firebase";
 export const QuesList =(props)=>{
-    
+    const [loadAnswer,setLoadAnswer]=React.useState(true)
     const [bool,setState]=React.useState(false)
     const db=firebase.firestore();
     React.useEffect(()=>{
         //console.log(props)
+        setLoadAnswer(true)
         if(props.uname!==undefined){
             //db.collection('answeredques').doc(this.props.uname).collection('qna').onSnapshot((snapshot)=>snapshot.docs.forEach((doc)=>console.log(doc.data())))
             db.collection('answeredques').doc(props.uname).collection('questions').orderBy('time').get().then(
@@ -18,6 +19,7 @@ export const QuesList =(props)=>{
                     props.questionsLoad(a)
                     props.answerUpdate()
                     setState(true)
+                    setLoadAnswer(false)
                 }
             )
         }
@@ -30,7 +32,7 @@ export const QuesList =(props)=>{
                     })
                     console.log('a')
                     props.questionsLoad(a)
-                    
+                    setLoadAnswer(false)
                     setState(true)
                 }
             )
@@ -52,10 +54,15 @@ export const QuesList =(props)=>{
       //  db.collection('answeredques').doc('Pacharjee').collection('qna').add({question:'How to add 2 numbers?'}).then((doc)=>{db.collection('answer').doc(doc.id).set({question:'How to add 2 numbers?',postedby:'Pacahrjee'})})
         //db.collection('answeredques/Pacharjee/qna').add({answer:'/qna/'})
      // db.collection('answeredques').doc('Pacharjee').collection('qna').get().then((doc)=>doc.forEach((d)=>d.data().answer.get().then((e)=>{console.log(e.data())})))
-     
+    
     return(
         <div style={{width:'80%',marginLeft:'2%',padding:'55px',zIndex:'2'}}>
         <h1 style={{fontWeight:'300'}}>{h1}</h1>
+            {loadAnswer &&
+                <div style={{display:'flex',width:'100%',height:'600px',alignItems:'center',justifyContent:'center'}}>
+                    <img src={require('../Images/loader2.gif')} style={{width:'70px',height:'70px'}}/>
+                </div> 
+            }
             <div>{
             bool ? props.qna.map((items)=><QuesItem items={items} uname={props.uname} {...props}/>) : <div style={{display:'flex',width:'100%',height:'600px',alignItems:'center',justifyContent:'center'}}>
             <img src={require('../Images/loader2.gif')} style={{width:'70px',height:'70px'}}/>

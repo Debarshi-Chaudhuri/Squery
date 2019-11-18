@@ -47,6 +47,7 @@ export const QuesItem=(props)=>
     const handleExpandClick = () => {
       setExpanded(!expanded);
     };
+    const [loadAnswer,setLoadAnswer]=React.useState(true);
     const [ans,setAns]=React.useState([]);
     React.useEffect(()=>{
       const db=props.firebase.firestore();
@@ -58,6 +59,7 @@ export const QuesItem=(props)=>
               a=[...a,doc]
             }
           )
+          setLoadAnswer(false);
           setAns(a)
           //console.log(ans)
         }
@@ -87,7 +89,8 @@ export const QuesItem=(props)=>
             props.answerUpdate();
           }
         )
-        
+        setExpanded(false)
+        setLoadAnswer(true)
         setText('')
       }
       else
@@ -116,11 +119,16 @@ export const QuesItem=(props)=>
     <br/>
         <Card style={{borderRadius:"10px",shadowColor: '#000000',backgroundColor:"#e4f5ef"}}>
           <CardContent>
-            <span style={{fontSize:'13px',fontWeight:'lighter'}}>Posted by: {name}</span>
+            <span style={{fontSize:'13px',fontWeight:'lighter',color:'#6e6767'}}>Posted by </span><span  style={{fontSize:'13px',fontWeight:'lighter'}}>{name}</span>
             <Typography><b> {props.items.question}</b></Typography><br/><hr/>
             
-            { ans.map((data)=>{
-                  return(<div><Typography style={{fontSize:'15px',fontWeight:'400'}}><span style={{fontSize:"15px"}}><b>{data.data().answeredBy}</b></span> repled:   {data.data().answer}</Typography><br/>
+            {loadAnswer  ?
+              <div style={{display:'flex',width:'100%',alignItems:'center',justifyContent:'center'}}>
+                <img src={require('../Images/dot_loader3.gif')} style={{width:'70px',height:'70px'}}/>
+              </div>    :
+              
+              ans.map((data)=>{
+                  return(<div><Typography style={{fontSize:'15px',fontWeight:'400'}}><span style={{fontSize:"15px",fontWeight:'bold'}}>{data.data().answeredBy}</span><span style={{fontSize:'13px',fontWeight:'lighter',color:'#6e6767'}}><br/>Answered </span> <br/>  {data.data().answer}</Typography><br/>
                  <hr/></div>)
               })
             }
