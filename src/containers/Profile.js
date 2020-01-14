@@ -57,7 +57,7 @@ const DialogActions = withStyles(theme => ({
 
 export const Profile=(props)=>{
 
-  //console.log(props)
+  console.log(props)
   const [openProfile, setOpenProfile] = React.useState(false);
   const [openPost, setOpenPost] = React.useState(false);
   const [state, setState] = React.useState({
@@ -230,7 +230,7 @@ export const Profile=(props)=>{
       <Button variant='contained' style={{backgroundColor:'rgba(219, 230, 235, 0.966)',height:'31px',left:'1%'}} ><img style={{height:'20px'}} src={icon} /></Button>
       <div style={{width:'40%',display:'inline-flex',alignItems:'center'}}>
         <Tooltip title="click to change or set profile picture" placement="bottom">
-          <Avatar alt={`${props.uname.charAt(0)}`} style={{cursor:'pointer',margin:'auto 5px auto auto',backgroundColor:'white'}} type="file" className={classes.bigAvatar} onClick={toggleDrawer('right', true)} src={`${state.image}`} />
+          <Avatar alt={`${props.uname.substring(0,3)}`} style={{cursor:'pointer',margin:'auto 5px auto auto',backgroundColor:'white'}} type="file" className={classes.bigAvatar} onClick={toggleDrawer('right', true)} src={`${state.image}`} />
         </Tooltip>  
       </div>
       <SwipeableDrawer

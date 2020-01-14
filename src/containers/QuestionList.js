@@ -24,7 +24,7 @@ export const QuesList =(props)=>{
             )
         }
         else{
-            db.collection('questions').orderBy('time').get().then(
+            db.collection('questions').get().then(
                 (query)=>{
                     let a=[]
                     query.forEach((doc)=>{
